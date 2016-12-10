@@ -1,5 +1,6 @@
 # Rpairix
-An R package for querying on pairs file (pairix-indexed bgzipped text file containig a pair of genomic coordinates) 
+* An R package for querying on pairs file (pairix-indexed bgzipped text file containig a pair of genomic coordinates).
+* This is an R binder for Pairix, a stand-alone C program (https://github.com/4dn-dcic/pairix).
 
 ## Installation
 ```
