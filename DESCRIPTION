@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: person("Soo", "Lee", email = "duplexa@gmail.com", role = c("aut", "cre"))
 Description: R binder for pairix, tool for querying a pair of genomic ranges in a pairs file (pairix-indexed bgzipped text file)
 Depends:
-    R (>= 2.5.1)
+    R (>= 2.15.3)
 License: MIT
 Encoding: UTF-8
 LazyData: true
