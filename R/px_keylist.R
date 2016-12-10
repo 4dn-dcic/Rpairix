@@ -7,7 +7,7 @@
 #' @keywords pairix query 2D
 #' @export px_keylist
 #' @examples
-#' filename = "data/merged_nodup.tab.chrblock_sorted.txt.gz"
+#' filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
 #' res = px_keylist(filename)
 #' @useDynLib Rpairix get_keylist_size get_keylist
 px_keylist<-function(filename){

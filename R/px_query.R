@@ -9,7 +9,7 @@
 #' @keywords pairix query 2D
 #' @export px_query
 #' @examples
-#' filename = "data/merged_nodup.tab.chrblock_sorted.txt.gz"
+#' filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
 #' querystr = "10:1-1000000|20"
 #' res = px_query(filename,querystr)
 #' @useDynLib Rpairix get_size get_lines
