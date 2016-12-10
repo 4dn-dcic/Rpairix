@@ -1,9 +1,9 @@
 #include "pairix.h"
 
 // load
-tabix_t *load(char* fn){
+pairix_t *load(char* fn){
 
-  tabix_t *tb=NULL; 
+  pairix_t *tb=NULL; 
 
   // index file name
   char fnidx[strlen(fn)+5];
@@ -24,7 +24,7 @@ void get_size(char** pfn, char** pquerystr, int* pn, int* pmax_len, int* pflag){
    int len=-1;
    const char *s;
 
-   tabix_t *tb = load(*pfn);
+   pairix_t *tb = load(*pfn);
 
    if(tb){
      const ti_conf_t *idxconf = ti_get_conf(tb->idx);
@@ -51,7 +51,7 @@ void get_lines(char** pfn, char** pquerystr, char** presultstr, int* pflag){
    const char *s;
    int k=0;
 
-   tabix_t *tb = load(*pfn);
+   pairix_t *tb = load(*pfn);
    if(tb){
      const ti_conf_t *idxconf = ti_get_conf(tb->idx);
      ti_iter_t iter = ti_querys_2d(tb, *pquerystr);
@@ -71,7 +71,7 @@ void get_lines(char** pfn, char** pquerystr, char** presultstr, int* pflag){
 void get_keylist_size(char** pfn, int *pn, int* pmax_key_len, int* pflag){
   int len;
   int i;
-  tabix_t *tb = load(*pfn);
+  pairix_t *tb = load(*pfn);
   if(tb){
     char** ss = ti_seqname(tb->idx, pn);
     *pmax_key_len=0;
@@ -88,7 +88,7 @@ void get_keylist_size(char** pfn, int *pn, int* pmax_key_len, int* pflag){
 //get the list of seq(chr)pair
 void get_keylist(char** pfn, char** pkeylist, int* pflag){
   int n,i;
-  tabix_t *tb = load(*pfn);
+  pairix_t *tb = load(*pfn);
   if(tb){
     char **ss = ti_seqname(tb->idx, &n);
     for(i=0;i<n;i++){
