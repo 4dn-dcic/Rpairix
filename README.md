@@ -62,7 +62,7 @@ px_seq2list(filename)
 ## Example run
 ```
 > library(Rpairix)
-> filename = "data/merged_nodup.tab.chrblock_sorted.txt.gz"
+> filename = "inst/merged_nodup.tab.chrblock_sorted.txt.gz"
 > querystr = "10:1-1000000|20"
 > res = px_query(filename,querystr)
 > print(res)
@@ -70,13 +70,13 @@ px_seq2list(filename)
 1  0 10 624779 1361  0 20 40941397  97868
 2 16 10 948577 2120 16 20 59816485 148396
 >
-> keys = px_keylist("data/merged_nodup.tab.chrblock_sorted.txt.gz")
+> keys = px_keylist("inst/merged_nodup.tab.chrblock_sorted.txt.gz")
 > length(keys)
 [1] 1239
 > keys[1:10]
 [1] "1|1"  "1|10" "1|11" "1|12" "1|13" "1|14" "1|15" "1|16" "1|17" "1|18"
 >
->chrs = px_seqlist("data/merged_nodup.tab.chrblock_sorted.txt.gz")
+>chrs = px_seqlist("inst/merged_nodup.tab.chrblock_sorted.txt.gz")
 >chrs
  [1] "1"          "10"         "11"         "12"         "13"        
  [6] "14"         "15"         "16"         "17"         "18"        
@@ -102,6 +102,7 @@ px_seq2list(filename)
 When the repo is modified, rebuild the R package:
 ```
 library(devtools)
+setwd("Rpairix")
 document()
 ```
 Individual R functions are written and documented in `R/`. The `src/rpairixlib.c` is the main C source file. Raw data files are under `inst/`.
