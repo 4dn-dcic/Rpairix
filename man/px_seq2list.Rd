@@ -13,7 +13,7 @@ px_seq2list(filename)
 This function allows you to get the list of second chromosomes in a pairix-indexed pairs file.
 }
 \examples{
-filename = "data/merged_nodup.tab.chrblock_sorted.txt.gz"
+filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
 res = px_seq2list(filename)
 }
 \keyword{2D}

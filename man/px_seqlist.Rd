@@ -13,7 +13,7 @@ px_seqlist(filename)
 This function allows you to get the list of chromosomes in a pairix-indexed pairs file.
 }
 \examples{
-filename = "data/merged_nodup.tab.chrblock_sorted.txt.gz"
+filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
 res = px_seqlist(filename)
 }
 \keyword{2D}

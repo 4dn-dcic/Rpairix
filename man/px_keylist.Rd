@@ -13,7 +13,7 @@ px_keylist(filename)
 This function allows you to get the list of keys (chromosome pairs) in a pairix-indexed pairs file.
 }
 \examples{
-filename = "data/merged_nodup.tab.chrblock_sorted.txt.gz"
+filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
 res = px_keylist(filename)
 }
 \keyword{2D}
