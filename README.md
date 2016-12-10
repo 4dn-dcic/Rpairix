@@ -99,7 +99,7 @@ px_seq2list(filename)
 
 
 ## For developers
-When the repo is modified, rebuild the R package:
+When you modify the repo, rebuild the R package before your commit/push:
 ```
 library(devtools)
 setwd("Rpairix")
