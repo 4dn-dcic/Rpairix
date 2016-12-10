@@ -98,5 +98,12 @@ px_seq2list(filename)
 ```
 
 
+## For developers
+When the repo is modified, rebuild the R package:
+```
+library(devtools)
+document()
+```
+Individual R functions are written and documented in `R/`. The `src/rpairixlib.c` is the main C source file. Data files are under `data/`.
 
 
