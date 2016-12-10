@@ -7,7 +7,7 @@
 #' @keywords pairix query 2D
 #' @export px_seqlist
 #' @examples
-#' filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
+#' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 #' res = px_seqlist(filename)
 px_seqlist<-function(filename){
   seqpairs = px_keylist(filename)

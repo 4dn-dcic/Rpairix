@@ -17,7 +17,7 @@ px_query(filename, querystr, max_mem = 8000)
 This function allows you to query a 2D range in a pairix-indexed pairs file.
 }
 \examples{
-filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
+filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 querystr = "10:1-1000000|20"
 res = px_query(filename,querystr)
 }

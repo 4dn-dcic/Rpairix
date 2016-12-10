@@ -13,7 +13,7 @@ px_seq1list(filename)
 This function allows you to get the list of first chromosomes in a pairix-indexed pairs file.
 }
 \examples{
-filename = "merged_nodup.tab.chrblock_sorted.txt.gz"
+filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 res = px_seq1list(filename)
 }
 \keyword{2D}
