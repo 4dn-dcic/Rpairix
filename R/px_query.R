@@ -12,6 +12,10 @@
 #' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 #' querystr = "10:1-1000000|20"
 #' res = px_query(filename,querystr)
+#'
+#' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",package="Rpairix")
+#' querystr = "10:1-1000000|20"
+#' res = px_query(filename,querystr)
 #' @useDynLib Rpairix get_size get_lines
 px_query<-function(filename, querystr, max_mem=8000){
 
