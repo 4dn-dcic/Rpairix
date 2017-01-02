@@ -23,7 +23,7 @@ px_seq2list(filename) # list of second chromosomes
 
 ### Query
 ```
-px_query(filename,querystr,max_mem=8000)
+px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE)
 ```
 * The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The query string is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000')

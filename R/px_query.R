@@ -4,7 +4,8 @@
 #'
 #' @param filename a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.
 #' @param querystr a pair of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")
-#' @param max_mem the total length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error.
+#' @param max_mem the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.
+#' @param stringsAsFactors the stringsAsFactors parameter for the data frame returned. Default False.
 #'
 #' @keywords pairix query 2D
 #' @export px_query
@@ -17,7 +18,7 @@
 #' querystr = "10:1-1000000|20"
 #' res = px_query(filename,querystr)
 #' @useDynLib Rpairix get_size get_lines
-px_query<-function(filename, querystr, max_mem=8000){
+px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE){
 
   # first-round, get the max length and the number of lines of the result.
   out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
@@ -37,7 +38,7 @@ px_query<-function(filename, querystr, max_mem=8000){
   if(out2[[4]][1] == -1) return(NULL)  ## error
 
   ## tabularize
-  res.table = as.data.frame(do.call("rbind",strsplit(out2[[3]],'\t')),stringsAsFactors=F)
+  res.table = as.data.frame(do.call("rbind",strsplit(out2[[3]],'\t')),stringsAsFactors=stringsAsFactors)
   return (res.table)
 }
 

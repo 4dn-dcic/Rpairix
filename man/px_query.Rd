@@ -4,14 +4,16 @@
 \alias{px_query}
 \title{Query function on pairix-indexed pairs file.}
 \usage{
-px_query(filename, querystr, max_mem = 8000)
+px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE)
 }
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
 
 \item{querystr}{a pair of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")}
 
-\item{max_mem}{the total length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error.}
+\item{max_mem}{the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.}
+
+\item{stringsAsFactors}{the stringsAsFactors parameter for the data frame returned. Default False.}
 }
 \description{
 This function allows you to query a 2D range in a pairix-indexed pairs file.
