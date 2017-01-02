@@ -9,7 +9,8 @@
 #' @examples
 #' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 #' res = px_keylist(filename)
-#' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",package="Rpairix")
+#' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
+#' package="Rpairix")
 #'
 #' res = px_keylist(filename)
 #' @useDynLib Rpairix get_keylist_size get_keylist
