@@ -1,4 +1,7 @@
 # Rpairix
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c719ab5066654aac999beb5d6e80cc56)](https://www.codacy.com/app/SooLee/Rpairix?utm_source=github.com&utm_medium=referral&utm_content=4dn-dcic/Rpairix&utm_campaign=badger)
+
 * An R package for querying on pairs file (pairix-indexed bgzipped text file containig a pair of genomic coordinates).
 * This is an R binder for Pairix, a stand-alone C program (https://github.com/4dn-dcic/pairix).
 
