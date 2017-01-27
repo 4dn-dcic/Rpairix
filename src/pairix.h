@@ -222,6 +222,9 @@ extern "C" {
 
 
 
+        /* bgzip function */
+        void fail(BGZF *fp);
+
 
 	/*******************
 	 * Deprecated APIs *

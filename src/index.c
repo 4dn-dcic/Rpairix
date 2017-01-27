@@ -1737,6 +1737,11 @@ char **uniq(char** seq_list, int n_seq_list, int *pn_uniq_seq)
 }
 
 
+void fail(BGZF* fp)
+{
+    fprintf(stderr, "Error: %d\n", fp->errcode);
+    exit(1);
+}
 
 
 // pairs merger - merge multiple 2D-sorted files into a merged, 2D-sorted stream 
