@@ -15,6 +15,11 @@ git clone https://github.com/4dn-dcic/Rpairix/
 cd Rpairix
 R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests .
 ```
+To install a specific version,
+```
+library(devtools)
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.3.zip")
+```
 
 
 ## Available R functions
