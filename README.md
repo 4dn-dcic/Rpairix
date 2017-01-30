@@ -3,10 +3,19 @@
 * This is an R binder for Pairix, a stand-alone C program (https://github.com/4dn-dcic/pairix).
 
 ## Installation
-```
+```r
 library(devtools)
 install_github("4dn-dcic/Rpairix")
 ```
+If you have a problem loading the Rpairix.so file ('undefined symbol' error), try adding `PKG_LIBS = -lz` to `~/.R/Makevars`. This way, zlib will be linked during compilation.
+
+Alternatively,
+```
+git clone https://github.com/4dn-dcic/Rpairix/
+cd Rpairix
+R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests .
+```
+
 
 ## Available R functions
 `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`
