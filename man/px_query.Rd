@@ -24,22 +24,48 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
 This function allows you to query a 2D range in a pairix-indexed pairs file.
 }
 \examples{
+
+## 2D-indexed file
 filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-querystr = "chrX|chrX"
+querystr = "chr10|chr20"
 res = px_query(filename, querystr)
 print(res)
 
 n = px_query(filename, querystr, linecount.only=TRUE)
 print(n) 
 
+querystr = "chr20|chr10"
+res = px_query(filename, querystr, autoflip=TRUE)
+print(res)
+
+## the following attempts will return NULL and give you a warning message.
+querystr = "chr20"
+res = px_query(filename, querystr, autoflip=TRUE)
+print(res)
+
 filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
 querystr = "10:1-1000000|20"
 res = px_query(filename, querystr)
 print(res)
 
+## the following attempts will return NULL and give you a warning message.
+res = px_query(filename, querystr, autoflip=TRUE)
+print(res)
+
 filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
 package="Rpairix")
 querystr = "10:1-1000000|20"
+res = px_query(filename, querystr)
+print(res)
+
+## 1D-indexed file
+filename = system.file(".","SRR1171591.variants.snp.vqsr.p.vcf.gz", package="Rpairix")
+querystr = 'chr10'
+res = px_query(filename, querystr)
+print(res)
+
+## the following attempts will return NULL and give you a warning message.
+querystr = 'chr10|chr20'
 res = px_query(filename, querystr)
 print(res)
 

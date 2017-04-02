@@ -159,5 +159,14 @@ void get_endpos2_col(char** pfn, int* pflag){
 }
 
 
+// checks if the file is 1D-indexed or 2D-indexed.
+// returns 2 or 1, or -1 if file can't be opened.
+void check_1d_vs_2d(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_sc2(tb->idx)+1==0?1:2;
+  }
+  else *pflag= -1;
+}
 
 
