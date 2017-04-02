@@ -184,6 +184,11 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.0.7
+* A 1D-indexed file is now added to `inst/` as an example file.
+* `px_query`: 2D query on 1D-indexed file now gives a warning message.
+* `px_query`: autoflip on 1D query gives a warning message even when the query result is not empty. 
+
 ### 0.0.6
 * The `linecount.only` and `autoflip` options are now added to the `px_query` function.
 
