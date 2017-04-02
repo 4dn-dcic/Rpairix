@@ -27,7 +27,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.6.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.7.zip")
 ```
 
 
