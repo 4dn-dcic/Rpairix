@@ -12,17 +12,32 @@
 #' @keywords pairix query 2D
 #' @export px_query
 #' @examples
+#' 
+#' ## 2D-indexed file
 #' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-#' querystr = "chrX|chrX"
+#' querystr = "chr10|chr20"
 #' res = px_query(filename, querystr)
 #' print(res)
 #'
 #' n = px_query(filename, querystr, linecount.only=TRUE)
 #' print(n) 
 #'
+#' querystr = "chr20|chr10"
+#' res = px_query(filename, querystr, autoflip=TRUE)
+#' print(res)
+#'
+#' ## the following attempts will return NULL and give you a warning message.
+#' querystr = "chr20"
+#' res = px_query(filename, querystr, autoflip=TRUE)
+#' print(res)
+#'
 #' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
 #' querystr = "10:1-1000000|20"
 #' res = px_query(filename, querystr)
+#' print(res)
+#'
+#' ## the following attempts will return NULL and give you a warning message.
+#' res = px_query(filename, querystr, autoflip=TRUE)
 #' print(res)
 #'
 #' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
@@ -31,23 +46,37 @@
 #' res = px_query(filename, querystr)
 #' print(res)
 #'
-#' @useDynLib Rpairix get_size get_lines
+#' ## 1D-indexed file
+#' filename = system.file(".","SRR1171591.variants.snp.vqsr.p.vcf.gz", package="Rpairix")
+#' querystr = 'chr10'
+#' res = px_query(filename, querystr)
+#' print(res)
+#' 
+#' ## the following attempts will return NULL and give you a warning message.
+#' querystr = 'chr10|chr20'
+#' res = px_query(filename, querystr)
+#' print(res)
+#'
+#' @useDynLib Rpairix get_size get_lines check_1d_vs_2d
 px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE, linecount.only=FALSE, autoflip=FALSE){
+
+  # sanity check for 2D query on 1D index.
+  ind_dim = .C("check_1d_vs_2d", filename, as.integer(0))
+  if(ind_dim[[2]][1]==1 && length(grep('|',querystr, fixed=TRUE))>0) { message("2D query on 1D-indexed file?"); return(NULL) }
+
+  # sanity check for autoflip on 1D query
+  if(autoflip==TRUE && length(grep('|',querystr, fixed=TRUE))==0) { message("autoflip works only for 2D query."); return(NULL) }
 
   # first-round, get the max length and the number of lines of the result.
   out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
   if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
   n=out[[3]][1]
   if(n==0 && autoflip==TRUE) {
-    if(length(grep("|",querystr))) {
-      querystr=paste(strsplit(querystr,'|',fixed=TRUE)[[1]][c(2,1)],collapse="|")  ## flip mate1 and mate2
-      out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
-      if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
-      n=out[[3]][1]
-      if(linecount.only == TRUE) return(n)
-    } else {
-      message("autoflip works only for 2D query."); return(NULL)
-    }
+    querystr=paste(strsplit(querystr,'|',fixed=TRUE)[[1]][c(2,1)],collapse="|")  ## flip mate1 and mate2
+    out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
+    if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
+    n=out[[3]][1]
+    if(linecount.only == TRUE) return(n)
   }
   if(linecount.only == TRUE) return(n)
 
