@@ -7,8 +7,13 @@
 #' @keywords pairix query 2D
 #' @export px_seq1list
 #' @examples
+#' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+#' res = px_seq1list(filename)
+#' print(res)
+#'
 #' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 #' res = px_seq1list(filename)
+#' print(res)
 px_seq1list<-function(filename){
   seqpairs = px_keylist(filename)
   seq1_list = unique(sapply(seqpairs,function(xx)strsplit(xx,'|',fixed=T)[[1]][1]))

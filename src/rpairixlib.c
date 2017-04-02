@@ -100,4 +100,12 @@ void get_keylist(char** pfn, char** pkeylist, int* pflag){
   else *pflag = -1; // error
 }
 
+//check if a key (chr for 1D, chr pair for 2D) exists
+void exists(char** pfn, char** pkey, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_tid(tb->idx, *pkey)!=-1?1:0;
+  }
+  else *pflag= -1;
+}
 

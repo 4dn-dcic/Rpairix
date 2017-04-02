@@ -10,14 +10,22 @@
 #' @keywords pairix query 2D
 #' @export px_query
 #' @examples
-#' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
+#' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+#' querystr = "chrX|chrX"
+#' res = px_query(filename, querystr)
+#' print(res)
+#'
+#' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
 #' querystr = "10:1-1000000|20"
-#' res = px_query(filename,querystr)
+#' res = px_query(filename, querystr)
+#' print(res)
 #'
 #' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
 #' package="Rpairix")
 #' querystr = "10:1-1000000|20"
-#' res = px_query(filename,querystr)
+#' res = px_query(filename, querystr)
+#' print(res)
+#'
 #' @useDynLib Rpairix get_size get_lines
 px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE){
 

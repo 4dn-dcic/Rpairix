@@ -72,6 +72,13 @@ px_seq2list(filename)
 * The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is a vector of second chromosomes.
 
+### Check if a chromosome pair (or chromosome, for 1D) exists
+```
+px_exists(filename, key)
+```
+* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* Key is a chromosome pair (or a chromosome for 1D)
+* The return value is 1 (exists), 0 (not exist), or -1 (error)
 
 ## Example run
 ```
@@ -109,6 +116,9 @@ px_seq2list(filename)
 [71] "GL000240.1" "GL000241.1" "GL000242.1" "GL000243.1" "GL000244.1"
 [76] "GL000245.1" "GL000246.1" "GL000247.1" "GL000248.1" "GL000249.1"
 [81] "MT"         "NC_007605"  "X"          "Y"     
+>
+>px_exists("inst/merged_nodup.tab.chrblock_sorted.txt.gz","1|1")
+>[1] 1
 ```
 
 
