@@ -7,12 +7,19 @@
 #' @keywords pairix query 2D
 #' @export px_keylist
 #' @examples
+#' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+#' res = px_keylist(filename)
+#' print(res)
+#'
 #' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 #' res = px_keylist(filename)
+#' print(res)
+#'
 #' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
 #' package="Rpairix")
-#'
 #' res = px_keylist(filename)
+#' print(res)
+#'
 #' @useDynLib Rpairix get_keylist_size get_keylist
 px_keylist<-function(filename){
    # first-round, get the max length and the number of items in the key list.

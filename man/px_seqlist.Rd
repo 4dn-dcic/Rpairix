@@ -13,8 +13,13 @@ px_seqlist(filename)
 This function allows you to get the list of chromosomes in a pairix-indexed pairs file.
 }
 \examples{
+filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+res = px_seqlist(filename)
+print(res)
+
 filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 res = px_seqlist(filename)
+print(res)
 }
 \keyword{2D}
 \keyword{pairix}

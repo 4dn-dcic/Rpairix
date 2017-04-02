@@ -13,8 +13,13 @@ px_seq1list(filename)
 This function allows you to get the list of first chromosomes in a pairix-indexed pairs file.
 }
 \examples{
+filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+res = px_seq1list(filename)
+print(res)
+
 filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
 res = px_seq1list(filename)
+print(res)
 }
 \keyword{2D}
 \keyword{pairix}

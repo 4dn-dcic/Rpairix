@@ -13,7 +13,6 @@ pairix_t *load(char* fn){
   // open file
   if( tb = ti_open(fn, fnidx) )   
     tb->idx = ti_index_load(fn);
-  else printf("File doesn't exist.\n");
   return(tb);
 }
 
@@ -100,4 +99,12 @@ void get_keylist(char** pfn, char** pkeylist, int* pflag){
   else *pflag = -1; // error
 }
 
+//check if a key (chr for 1D, chr pair for 2D) exists
+void key_exists(char** pfn, char** pkey, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_tid(tb->idx, *pkey)!=-1?1:0;
+  }
+  else *pflag= -1;
+}
 
