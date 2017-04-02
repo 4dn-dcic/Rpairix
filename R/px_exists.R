@@ -23,8 +23,8 @@
 #' key = "10|20"
 #' res = px_exists(filename, key)
 #' print(res)
-#' @useDynLib Rpairix exists
+#' @useDynLib Rpairix key_exists
 px_exists<-function(filename, key){
-  out = .C("exists", filename, key, as.integer(0))
+  out = .C("key_exists", filename, key, as.integer(0))
   return(out[[3]][1])
 }
