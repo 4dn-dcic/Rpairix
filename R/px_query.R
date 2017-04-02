@@ -31,7 +31,7 @@ px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE
 
   # first-round, get the max length and the number of lines of the result.
   out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
-  if(out[[5]][1] == -1 ) return(NULL)  ## error
+  if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
   str_len = out[[4]][1]
   n=out[[3]][1]
   total_size = str_len * n

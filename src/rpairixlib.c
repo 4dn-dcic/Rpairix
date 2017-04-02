@@ -13,7 +13,6 @@ pairix_t *load(char* fn){
   // open file
   if( tb = ti_open(fn, fnidx) )   
     tb->idx = ti_index_load(fn);
-  else printf("File doesn't exist.\n");
   return(tb);
 }
 
