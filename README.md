@@ -54,13 +54,14 @@ px_endpos2_col(filename) # 1-based column index for mate2 end position
 
 ### Query
 ```
-px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE)
+px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE, autoflip=FALSE)
 ```
 * `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * `querystr` (query string) is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000')
 * `max_mem` is the maximum total length of the result strings (sum of string lengths).
 * The return value is a data frame, each row corresponding to the line in the input file within the query range.
 * If `linecount.only` is TRUE, the function returns only the number of output lines for the query. 
+* If `autoflip` is TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If `linecount.only` option is used in combination with `autoflip`, the result count is on the flipped query in case the query gets flipped.
 
 ### List of keys (chromosome pairs)
 ```
@@ -126,6 +127,18 @@ px_endpos2_col(filename)
 > print(n)
 > [1] 2
 >
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
+data frame with 0 columns and 0 rows
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
+                   V1    V2      V3    V4      V5 V6 V7
+1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", linecount.only=TRUE)
+[1] 0
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
+[1] 2
+>
+>
 > keys = px_keylist(filename)
 > length(keys)
 [1] 800
@@ -171,6 +184,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.0.6
+* The `linecount.only` and `autoflip` options are now added to the `px_query` function.
+
 ### 0.0.5
 * Functions `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col` are now added.
 

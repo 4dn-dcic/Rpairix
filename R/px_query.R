@@ -7,6 +7,7 @@
 #' @param max_mem the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.
 #' @param stringsAsFactors the stringsAsFactors parameter for the data frame returned. Default False.
 #' @param linecount.only If TRUE, the function returns an integer corresponding to the number of output lines instead of the actual query result. (default FALSE) 
+#' @param autoflip If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.
 #'
 #' @keywords pairix query 2D
 #' @export px_query
@@ -31,12 +32,23 @@
 #' print(res)
 #'
 #' @useDynLib Rpairix get_size get_lines
-px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE, linecount.only=FALSE){
+px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE, linecount.only=FALSE, autoflip=FALSE){
 
   # first-round, get the max length and the number of lines of the result.
   out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
   if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
   n=out[[3]][1]
+  if(n==0 && autoflip==TRUE) {
+    if(length(grep("|",querystr))) {
+      querystr=paste(strsplit(querystr,'|',fixed=TRUE)[[1]][c(2,1)],collapse="|")  ## flip mate1 and mate2
+      out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
+      if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
+      n=out[[3]][1]
+      if(linecount.only == TRUE) return(n)
+    } else {
+      message("autoflip works only for 2D query."); return(NULL)
+    }
+  }
   if(linecount.only == TRUE) return(n)
 
   str_len = out[[4]][1]

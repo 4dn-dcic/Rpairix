@@ -5,7 +5,7 @@
 \title{Query function on pairix-indexed pairs file.}
 \usage{
 px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
-  linecount.only = FALSE)
+  linecount.only = FALSE, autoflip = FALSE)
 }
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
@@ -17,6 +17,8 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
 \item{stringsAsFactors}{the stringsAsFactors parameter for the data frame returned. Default False.}
 
 \item{linecount.only}{If TRUE, the function returns an integer corresponding to the number of output lines instead of the actual query result. (default FALSE)}
+
+\item{autoflip}{If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.}
 }
 \description{
 This function allows you to query a 2D range in a pairix-indexed pairs file.
