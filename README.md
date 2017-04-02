@@ -2,6 +2,15 @@
 * An R package for querying on pairs file (pairix-indexed bgzipped text file containig a pair of genomic coordinates).
 * This is an R binder for Pairix, a stand-alone C program (https://github.com/4dn-dcic/pairix).
 
+## Table of contents
+* [Installation](#installation)
+* [Available R functions](#available-r-functions)
+* [Usage](#usage)
+* [Example run](#example-run)
+* [For developers](#for-developers)
+* [Version history](#version-history)
+
+
 ## Installation
 ```r
 library(devtools)
@@ -23,7 +32,7 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.4.zip")
 
 
 ## Available R functions
-`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`
+`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`
 
 ## Usage
 ```
@@ -33,6 +42,7 @@ px_keylist(filename) # list of keys (chromosome pairs)
 px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
 px_seq2list(filename) # list of second chromosomes
+px_exists(filename,key) # check if a key exists
 ```
 
 ### Query
