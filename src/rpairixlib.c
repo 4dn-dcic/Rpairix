@@ -108,3 +108,56 @@ void key_exists(char** pfn, char** pkey, int* pflag){
   else *pflag= -1;
 }
 
+
+//get column indices (1-based)
+void get_chr1_col(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_sc(tb->idx)+1;
+  }
+  else *pflag= -1;
+}
+
+void get_chr2_col(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_sc2(tb->idx)+1;
+  }
+  else *pflag= -1;
+}
+
+void get_startpos1_col(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_bc(tb->idx)+1;
+  }
+  else *pflag= -1;
+}
+
+void get_startpos2_col(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_bc2(tb->idx)+1;
+  }
+  else *pflag= -1;
+}
+
+void get_endpos1_col(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_ec(tb->idx)+1;
+  }
+  else *pflag= -1;
+}
+
+void get_endpos2_col(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = ti_get_ec2(tb->idx)+1;
+  }
+  else *pflag= -1;
+}
+
+
+
+

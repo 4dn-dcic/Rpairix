@@ -27,12 +27,12 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.4.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.5.zip")
 ```
 
 
 ## Available R functions
-`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`
+`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`
 
 ## Usage
 ```
@@ -43,6 +43,12 @@ px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
 px_seq2list(filename) # list of second chromosomes
 px_exists(filename,key) # check if a key exists
+px_chr1_col(filename) # 1-based column index for mate1 chromosome
+px_chr2_col(filename) # 1-based column index for mate2 chromosome
+px_startpos1_col(filename) # 1-based column index for mate1 start position
+px_startpos2_col(filename) # 1-based column index for mate2 start position
+px_endpos1_col(filename) # 1-based column index for mate1 end position
+px_endpos2_col(filename) # 1-based column index for mate2 end position
 ```
 
 ### Query
@@ -90,6 +96,19 @@ px_exists(filename, key)
 * Key is a chromosome pair (or a chromosome for 1D)
 * The return value is 1 (exists), 0 (not exist), or -1 (error)
 
+### Returns 1-based column indices
+```
+px_chr1_col(filename)
+px_chr2_col(filename)
+px_startpos1_col(filename)
+px_startpos2_col(filename)
+px_endpos1_col(filename)
+px_endpos2_col(filename)
+```
+* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* The return value is an integer corresponding to the 1-based column index for mate1 chromosome, mate2 chromosome, mate1 start position, mate2 start position, mate1 end position and mate2 end position, respectively.
+
+
 ## Example run
 ```
 > library(Rpairix)
@@ -118,6 +137,19 @@ px_exists(filename, key)
 [10] "chr15"                
 > px_exists(filename, "chr10|chr20")
 [1] 1
+>
+> px_chr1_col("inst/test_4dn.pairs.gz")
+[1] 2
+> px_chr2_col("inst/test_4dn.pairs.gz")
+[1] 4
+> px_startpos1_col("inst/test_4dn.pairs.gz")
+[1] 3
+> px_startpos2_col("inst/test_4dn.pairs.gz")
+[1] 5
+> px_endpos1_col("inst/test_4dn.pairs.gz")
+[1] 3
+> px_endpos2_col("inst/test_4dn.pairs.gz")
+[1] 5
 ```
 
 
@@ -132,8 +164,11 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.0.5
+* Functions `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col` are now added.
+
 ### 0.0.4
-* Function px_exists is now added.
+* Function `px_exists` is now added.
 * Source is synced with pairix/pypairix 0.1.1.
 * 4dn pairs example is added
 
