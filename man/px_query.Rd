@@ -4,7 +4,8 @@
 \alias{px_query}
 \title{Query function on pairix-indexed pairs file.}
 \usage{
-px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE)
+px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
+  linecount.only = FALSE)
 }
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
@@ -14,6 +15,8 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE)
 \item{max_mem}{the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.}
 
 \item{stringsAsFactors}{the stringsAsFactors parameter for the data frame returned. Default False.}
+
+\item{linecount.only}{If TRUE, the function returns an integer corresponding to the number of output lines instead of the actual query result. (default FALSE)}
 }
 \description{
 This function allows you to query a 2D range in a pairix-indexed pairs file.
@@ -23,6 +26,9 @@ filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
 querystr = "chrX|chrX"
 res = px_query(filename, querystr)
 print(res)
+
+n = px_query(filename, querystr, linecount.only=TRUE)
+print(n) 
 
 filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
 querystr = "10:1-1000000|20"
