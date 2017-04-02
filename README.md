@@ -27,7 +27,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.5.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.6.zip")
 ```
 
 
@@ -38,6 +38,7 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.5.zip")
 ```
 library(Rpairix)
 px_query(filename,querystr) # query
+px_query(filename,querystr,linecount.only=TRUE) # number of output lines for the query
 px_keylist(filename) # list of keys (chromosome pairs)
 px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
@@ -53,47 +54,48 @@ px_endpos2_col(filename) # 1-based column index for mate2 end position
 
 ### Query
 ```
-px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE)
+px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
-* The query string is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000')
-* The max_mem is the maximum total length of the result strings (sum of string lengths). 
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `querystr` (query string) is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000')
+* `max_mem` is the maximum total length of the result strings (sum of string lengths).
 * The return value is a data frame, each row corresponding to the line in the input file within the query range.
+* If `linecount.only` is TRUE, the function returns only the number of output lines for the query. 
 
 ### List of keys (chromosome pairs)
 ```
 px_keylist(filename)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is a vector of keys (chromosome pairs).
 
 ### List of chromosomes
 ```
 px_seqlist(filename)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is a vector of chromosomes.
 
 ### List of first chromosomes
 ```
 px_seq1list(filename)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is a vector of first chromosomes.
 
 ### List of second chromosomes
 ```
 px_seq2list(filename)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is a vector of second chromosomes.
 
 ### Check if a chromosome pair (or chromosome, for 1D) exists
 ```
 px_exists(filename, key)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
-* Key is a chromosome pair (or a chromosome for 1D)
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `key` is a chromosome pair (or a chromosome for 1D)
 * The return value is 1 (exists), 0 (not exist), or -1 (error)
 
 ### Returns 1-based column indices
@@ -105,7 +107,7 @@ px_startpos2_col(filename)
 px_endpos1_col(filename)
 px_endpos2_col(filename)
 ```
-* The filename is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is an integer corresponding to the 1-based column index for mate1 chromosome, mate2 chromosome, mate1 start position, mate2 start position, mate1 end position and mate2 end position, respectively.
 
 
@@ -119,6 +121,11 @@ px_endpos2_col(filename)
                    V1    V2      V3    V4      V5 V6 V7
 1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
 2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
+>
+> n = px_query(filename,querystr, linecount.only=TRUE)
+> print(n)
+> [1] 2
+>
 > keys = px_keylist(filename)
 > length(keys)
 [1] 800
