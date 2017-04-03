@@ -1,4 +1,6 @@
 #include "pairix.h"
+#include <R.h>
+#include <Rdefines.h>
 
 // load
 pairix_t *load(char* fn){
@@ -14,55 +16,6 @@ pairix_t *load(char* fn){
   if( tb = ti_open(fn, fnidx) )   
     tb->idx = ti_index_load(fn);
   return(tb);
-}
-
-
-//load + get size of the query result
-void get_size(char** pfn, char** pquerystr, int* pn, int* pmax_len, int* pflag){
-
-   int len=-1;
-   const char *s;
-
-   pairix_t *tb = load(*pfn);
-
-   if(tb){
-     const ti_conf_t *idxconf = ti_get_conf(tb->idx);
-     ti_iter_t iter = ti_querys_2d(tb, *pquerystr);
-  
-     *pn=0;
-     *pmax_len=0;
-     while ((s = ti_read(tb, iter, &len)) != 0) {
-       // if ((int)(*s) != idxconf->meta_char) break;    // I don't fully understand this line. Works without the line.
-       if(len>*pmax_len) *pmax_len = len;
-       (*pn)++;
-     }
- 
-     ti_close(tb);
-   }
-   else *pflag = -1; // error
-}
-
-
-//load + return the result
-void get_lines(char** pfn, char** pquerystr, char** presultstr, int* pflag){
-
-   int len=-1;
-   const char *s;
-   int k=0;
-
-   pairix_t *tb = load(*pfn);
-   if(tb){
-     const ti_conf_t *idxconf = ti_get_conf(tb->idx);
-     ti_iter_t iter = ti_querys_2d(tb, *pquerystr);
-
-     while ((s = ti_read(tb, iter, &len)) != 0) {
-       // if ((int)(*s) != idxconf->meta_char) break;    // I don't fully understand this line. Works without the line.
-       strcpy(presultstr[k++],s);
-     }
-
-     ti_close(tb);
-   }
-   else *pflag= -1;  // error
 }
 
 
@@ -167,6 +120,220 @@ void check_1d_vs_2d(char** pfn, int* pflag){
     *pflag = ti_get_sc2(tb->idx)+1==0?1:2;
   }
   else *pflag= -1;
+}
+
+
+SEXP setInt() {
+   SEXP myint;
+   int *p_myint;
+   int len = 5;
+
+   // Allocating storage space:
+   PROTECT(myint = NEW_INTEGER(len));  
+   p_myint = INTEGER_POINTER(myint);
+   p_myint[0] = 7;
+   UNPROTECT(1);
+   return myint;
+}
+
+SEXP getChar(SEXP mychar) {
+  char *Pmychar[5];  // array of 5 pointers 
+                       // to character strings
+
+  PROTECT(mychar = AS_CHARACTER(mychar)); 
+
+  // allocate memory:
+  Pmychar[0] = R_alloc(strlen(CHAR(STRING_ELT(mychar, 0))), sizeof(char)); 
+  Pmychar[1] = R_alloc(strlen(CHAR(STRING_ELT(mychar, 1))), sizeof(char)); 
+
+  // ... and copy mychar to Pmychar: 
+  strcpy(Pmychar[0], CHAR(STRING_ELT(mychar, 0))); 
+  strcpy(Pmychar[1], CHAR(STRING_ELT(mychar, 1))); 
+
+  printf(" Printed from C:");
+  printf(" %s %s \n",Pmychar[0],Pmychar[1]);
+  UNPROTECT(1);
+  return(R_NilValue); 
+}
+
+
+SEXP getChar2(SEXP mychar, SEXP mypn) {
+  PROTECT(mypn = AS_INTEGER(mypn));
+  int *pn = INTEGER_POINTER(mypn);
+  printf(" Printed from C: %d strings", *pn);
+  char *Pmychar[*pn];  // array of n pointers 
+                       // to character strings
+
+  PROTECT(mychar = AS_CHARACTER(mychar)); 
+
+  // allocate memory:
+  int i;
+  for(i=0;i<*pn;i++){
+    Pmychar[i] = R_alloc(strlen(CHAR(STRING_ELT(mychar, i))), sizeof(char)); 
+    // ... and copy mychar to Pmychar: 
+    strcpy(Pmychar[i], CHAR(STRING_ELT(mychar, i))); 
+    printf(" %s\n",Pmychar[i]);
+  }
+
+  *pn++;
+
+  UNPROTECT(2);
+  return(R_NilValue); 
+}
+
+
+//.Call-compatible
+//load + get size of the query result
+//input:
+//  _r_pfn : input filename (a single character string)
+//  _r_pquerystr : a character vector of query strings
+//  _r_pnquery : length _r_pquerystr (number of elements in the vector)
+//output is an R integer vector containing (n, max_len, flag).
+//  n : number of output lines
+//  max_len : maximum length of output lines
+//  flag : 0 if successfully run, -1 if there is an error (e.g. can't open input file)
+SEXP get_size(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery){ 
+
+   // input conversion from R to C
+   // number of queries
+   PROTECT(_r_pnquery = AS_INTEGER(_r_pnquery));
+   int *pnquery = INTEGER_POINTER(_r_pnquery);
+
+   // file name
+   char *pfn[1];
+   PROTECT(_r_pfn = AS_CHARACTER(_r_pfn));
+   pfn[0] = R_alloc(strlen(CHAR(STRING_ELT(_r_pfn, 0))), sizeof(char));
+   strcpy(pfn[0], CHAR(STRING_ELT(_r_pfn, 0))); 
+
+   // queries
+   char *pquerystr[*pnquery];
+   PROTECT(_r_pquerystr = AS_CHARACTER(_r_pquerystr));
+   int i;
+   for(i=0;i<*pnquery;i++){
+     pquerystr[i] = R_alloc(strlen(CHAR(STRING_ELT(_r_pquerystr, i))), sizeof(char)); 
+     strcpy(pquerystr[i], CHAR(STRING_ELT(_r_pquerystr, i))); 
+   }
+
+   // to be return values
+   int n=0, max_len=0, flag=0;
+
+   int len=-1;
+   const char *s;
+
+   pairix_t *tb = load(*pfn);
+
+   if(tb){
+     const ti_conf_t *idxconf = ti_get_conf(tb->idx);
+
+     int i;
+     for(i=0;i<*pnquery;i++){
+       ti_iter_t iter = ti_querys_2d(tb, pquerystr[i]);
+       while ((s = ti_read(tb, iter, &len)) != 0) {
+         // if ((int)(*s) != idxconf->meta_char) break;    // I don't fully understand this line. Works without the line.
+         if(len>max_len) max_len = len;
+         n++;
+       }
+     }
+
+     ti_close(tb);
+   }
+   else flag = -1; // error
+   
+   // output 
+   // preturn = (n, max_len, flag)
+   SEXP _r_preturn;
+   PROTECT(_r_preturn = NEW_INTEGER(3));
+   int *preturn = INTEGER_POINTER(_r_preturn);
+   preturn[0] = n;
+   preturn[1] = max_len;
+   preturn[2] = flag;
+
+   UNPROTECT(4);
+   return(_r_preturn);
+}
+
+
+//.Call-compatible
+//load + return the result
+//input:
+//  _r_pfn : input filename (a single character string)
+//  _r_pquerystr : a character vector of query strings
+//  _r_pnquery : length _r_pquerystr (number of elements in the vector)
+//  _r_pn : length of the result strings (number of lines)
+//output is an R list containing (resultstr, flag).
+//  resultstr : a character vector of result strings
+//  flag : 0 if successfully run, -1 if there is an error (e.g. can't open input file)
+SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){ 
+
+   // input conversion from R to C
+   // number of queries
+   PROTECT(_r_pnquery = AS_INTEGER(_r_pnquery));
+   int *pnquery = INTEGER_POINTER(_r_pnquery);
+
+   // file name
+   char *pfn[1];
+   PROTECT(_r_pfn = AS_CHARACTER(_r_pfn));
+   pfn[0] = R_alloc(strlen(CHAR(STRING_ELT(_r_pfn, 0))), sizeof(char));
+   strcpy(pfn[0], CHAR(STRING_ELT(_r_pfn, 0))); 
+
+   // queries
+   char *pquerystr[*pnquery];
+   PROTECT(_r_pquerystr = AS_CHARACTER(_r_pquerystr));
+   int i;
+   for(i=0;i<*pnquery;i++){
+     pquerystr[i] = R_alloc(strlen(CHAR(STRING_ELT(_r_pquerystr, i))), sizeof(char)); 
+     strcpy(pquerystr[i], CHAR(STRING_ELT(_r_pquerystr, i))); 
+   }
+
+   // number of lines in the query result
+   PROTECT(_r_pn = AS_INTEGER(_r_pn));
+   int *pn = INTEGER_POINTER(_r_pn);
+
+   // to be return values
+   //char **presultstr;
+   SEXP _r_presultstr;
+   PROTECT(_r_presultstr = allocVector(STRSXP, *pn));
+   int flag=0;
+
+   int len=-1;
+   const char *s;
+   int k=0;
+
+   pairix_t *tb = load(*pfn);
+
+   if(tb){
+     const ti_conf_t *idxconf = ti_get_conf(tb->idx);
+
+     int i;
+     for(i=0;i<*pnquery;i++){
+       ti_iter_t iter = ti_querys_2d(tb, pquerystr[i]);
+       while ((s = ti_read(tb, iter, &len)) != 0) {
+         // if ((int)(*s) != idxconf->meta_char) break;    // I don't fully understand this line. Works without the line.
+         // strcpy(presultstr[k++],s);
+         SET_STRING_ELT(_r_presultstr, k++, mkChar(s)); 
+       }
+     }
+
+     ti_close(tb);
+   }
+   else flag = -1; // error
+   
+   // output 
+   // preturn = (n, max_len, flag)
+   SEXP _r_preturn;
+   PROTECT(_r_preturn = allocVector(VECSXP, 2));
+   SET_VECTOR_ELT(_r_preturn, 0, _r_presultstr);
+
+   // preturn_flag : flag
+   SEXP _r_preturn_flag;
+   PROTECT(_r_preturn_flag = NEW_INTEGER(1));
+   int *preturn_flag = INTEGER_POINTER(_r_preturn_flag);
+   preturn_flag[0] = flag;
+
+   SET_VECTOR_ELT(_r_preturn, 1, _r_preturn_flag);
+
+   UNPROTECT(7);
+   return(_r_preturn);
 }
 
 

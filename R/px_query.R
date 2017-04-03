@@ -68,19 +68,20 @@ px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE
   if(autoflip==TRUE && length(grep('|',querystr, fixed=TRUE))==0) { message("autoflip works only for 2D query."); return(NULL) }
 
   # first-round, get the max length and the number of lines of the result.
-  out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
-  if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
-  n=out[[3]][1]
+  out = .Call("get_size", filename, querystr, length(querystr))
+
+  if(out[3] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
+  n=out[1]
   if(n==0 && autoflip==TRUE) {
     querystr=paste(strsplit(querystr,'|',fixed=TRUE)[[1]][c(2,1)],collapse="|")  ## flip mate1 and mate2
-    out =.C("get_size", filename, querystr, as.integer(0), as.integer(0), as.integer(0))
-    if(out[[5]][1] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
-    n=out[[3]][1]
+    out = .Call("get_size", filename, querystr, length(querystr))
+    if(out[3] == -1 ) { message("Can't open input file"); return(NULL) }  ## error
+    n=out[1]
     if(linecount.only == TRUE) return(n)
   }
   if(linecount.only == TRUE) return(n)
 
-  str_len = out[[4]][1]
+  str_len = out[2]
   total_size = str_len * n
   if(total_size > max_mem) {
      log = paste("not enough memory: Total length of the result to be stored is",total_size,sep=" ")
@@ -90,11 +91,12 @@ px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE
 
   # second-round, actually get the lines from the file
   result_str = rep(paste(rep("a",str_len),collapse=''),n)
-  out2 =.C("get_lines", filename , querystr, result_str, as.integer(0))
-  if(out2[[4]][1] == -1) return(NULL)  ## error
+  out2 =.Call("get_lines", filename , querystr, length(querystr), n) 
+
+  if(out2[[2]][1] == -1) return(NULL)  ## error
 
   ## tabularize
-  res.table = as.data.frame(do.call("rbind",strsplit(out2[[3]],'\t')),stringsAsFactors=stringsAsFactors)
+  res.table = as.data.frame(do.call("rbind",strsplit(out2[[1]],'\t')),stringsAsFactors=stringsAsFactors)
   return (res.table)
 }
 
