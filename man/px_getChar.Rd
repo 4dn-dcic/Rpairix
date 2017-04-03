@@ -6,6 +6,9 @@
 \usage{
 px_getChar(char_vector)
 }
+\arguments{
+\item{char_vector}{a character vector}
+}
 \description{
 This function is a test function.
 }
