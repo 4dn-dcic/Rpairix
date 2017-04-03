@@ -27,7 +27,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.8.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.9.zip")
 ```
 
 
@@ -58,7 +58,7 @@ px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -
 px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE, autoflip=FALSE)
 ```
 * `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
-* `querystr` (query string) is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000')
+* `querystr` (query string) is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000'). It can be a vector of query strings.
 * `max_mem` is the maximum total length of the result strings (sum of string lengths).
 * The return value is a data frame, each row corresponding to the line in the input file within the query range.
 * If `linecount.only` is TRUE, the function returns only the number of output lines for the query. 
@@ -123,6 +123,8 @@ px_check_dim(filename)
 ## Example run
 ```
 > library(Rpairix)
+>
+> # single-query
 > filename = "inst/test_4dn.pairs.gz"
 > querystr = "chr10:1-3000000|chr20"
 > res = px_query(filename,querystr)
@@ -131,10 +133,12 @@ px_check_dim(filename)
 1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
 2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
 >
+> # line-count-only
 > n = px_query(filename,querystr, linecount.only=TRUE)
 > print(n)
 > [1] 2
 >
+> # auto-flip
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
 data frame with 0 columns and 0 rows
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
@@ -146,7 +150,12 @@ data frame with 0 columns and 0 rows
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
 [1] 2
 >
+> # multi-query
+> querystr = c("chr10|chr20","chr2|chr20")
+> n = px_query(filename,querystr, linecount.only=TRUE)
+> print(n)
 >
+> # getting list of chromosome pairs and chromosomes
 > keys = px_keylist(filename)
 > length(keys)
 [1] 800
@@ -163,9 +172,12 @@ data frame with 0 columns and 0 rows
  [4] "chr10"                 "chr11"                 "chr11_gl000202_random"
  [7] "chr12"                 "chr13"                 "chr14"                
 [10] "chr15"                
+> 
+> # checking if a key (chromosome pair for 2D-indexed file or chromosome for 1D-indexed file) exists
 > px_exists(filename, "chr10|chr20")
 [1] 1
 >
+> # getting colum indices
 > px_chr1_col("inst/test_4dn.pairs.gz")
 [1] 2
 > px_chr2_col("inst/test_4dn.pairs.gz")
@@ -179,6 +191,7 @@ data frame with 0 columns and 0 rows
 > px_endpos2_col("inst/test_4dn.pairs.gz")
 [1] 5
 > 
+> # checking if the file is 1D-indexed or 2D-indexed
 > px_check_dim("inst/test_4dn.pairs.gz")
 [1] 2
 ```
@@ -195,6 +208,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.0.9
+* Multi-query now possible with function `px_query` (`querystr` can be a vector of strings).
+
 ### 0.0.8
 * Further synced with pairix/pypairix 0.1.1.
 * Function `px_check_dim` is now added.

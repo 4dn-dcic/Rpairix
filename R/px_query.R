@@ -3,7 +3,7 @@
 #' This function allows you to query a 2D range in a pairix-indexed pairs file.
 #'
 #' @param filename a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.
-#' @param querystr a pair of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")
+#' @param querystr a character vector containing a list of pairs of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")
 #' @param max_mem the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.
 #' @param stringsAsFactors the stringsAsFactors parameter for the data frame returned. Default False.
 #' @param linecount.only If TRUE, the function returns an integer corresponding to the number of output lines instead of the actual query result. (default FALSE) 
@@ -15,7 +15,7 @@
 #' 
 #' ## 2D-indexed file
 #' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-#' querystr = "chr10|chr20"
+#' querystr = c("chr10|chr20","chr2|chr2")
 #' res = px_query(filename, querystr)
 #' print(res)
 #'
