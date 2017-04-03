@@ -1,7 +1,7 @@
 #' Test function
 #'
 #' This function is a test function.
-#' @param getChar a character vector
+#' @param char_vector a character vector
 #'
 #' @keywords pairix test
 #' @export px_getChar
