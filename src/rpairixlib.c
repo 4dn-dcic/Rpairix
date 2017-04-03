@@ -160,17 +160,15 @@ SEXP getChar(SEXP mychar) {
 SEXP getChar2(SEXP mychar, SEXP mypn) {
   PROTECT(mypn = AS_INTEGER(mypn));
   int *pn = INTEGER_POINTER(mypn);
-  printf(" Printed from C: %d strings", *pn);
+  printf(" Printed from C: %d strings\n", *pn);
   char *Pmychar[*pn];  // array of n pointers 
                        // to character strings
 
   PROTECT(mychar = AS_CHARACTER(mychar)); 
 
-  // allocate memory:
   int i;
   for(i=0;i<*pn;i++){
     Pmychar[i] = R_alloc(strlen(CHAR(STRING_ELT(mychar, i))), sizeof(char)); 
-    // ... and copy mychar to Pmychar: 
     strcpy(Pmychar[i], CHAR(STRING_ELT(mychar, i))); 
     printf(" %s\n",Pmychar[i]);
   }
