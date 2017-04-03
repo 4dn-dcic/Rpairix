@@ -175,7 +175,7 @@ SEXP getChar2(SEXP mychar, SEXP mypn) {
     printf(" %s\n",Pmychar[i]);
   }
 
-  *pn++;
+  (*pn)++;
 
   UNPROTECT(2);
   return(R_NilValue); 
