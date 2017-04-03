@@ -27,12 +27,12 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.7.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.8.zip")
 ```
 
 
 ## Available R functions
-`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`
+`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`
 
 ## Usage
 ```
@@ -50,6 +50,7 @@ px_startpos1_col(filename) # 1-based column index for mate1 start position
 px_startpos2_col(filename) # 1-based column index for mate2 start position
 px_endpos1_col(filename) # 1-based column index for mate1 end position
 px_endpos2_col(filename) # 1-based column index for mate2 end position
+px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
 ```
 
 ### Query
@@ -112,6 +113,13 @@ px_endpos2_col(filename)
 * The return value is an integer corresponding to the 1-based column index for mate1 chromosome, mate2 chromosome, mate1 start position, mate2 start position, mate1 end position and mate2 end position, respectively.
 
 
+### Check 1D vs 2D
+```
+px_check_dim(filename)
+```
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* The return value is an integer; 1 if the input file is 1D-indexed, 2 if 2D-indexed, -1 if an error occurred.
+
 ## Example run
 ```
 > library(Rpairix)
@@ -170,6 +178,9 @@ data frame with 0 columns and 0 rows
 [1] 3
 > px_endpos2_col("inst/test_4dn.pairs.gz")
 [1] 5
+> 
+> px_check_dim("inst/test_4dn.pairs.gz")
+[1] 2
 ```
 
 
@@ -184,6 +195,10 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.0.8
+* Further synced with pairix/pypairix 0.1.1.
+* Function `px_check_dim` is now added.
+
 ### 0.0.7
 * A 1D-indexed file is now added to `inst/` as an example file.
 * `px_query`: 2D query on 1D-indexed file now gives a warning message.
