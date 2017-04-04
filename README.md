@@ -3,10 +3,10 @@
 * `Rpairix` was developed as a tool for the 4DN-standard `pairs` file format describing Hi-C data: https://github.com/4dn-dcic/pairix/pairs_format_specification.md
 * However, it can be used as a generic tool for indexing and querying any bgzipped text file containing genomic coordinates, for either 2D- or 1D-indexing.
 * For example, given a text file with a million lines like below, you want to extract lines where the first coordinate is chr10 and the second is between positions 10,000,000 and 20,000,000 on chrX. An awk command would read the file from the beginning to the end. Rpairix allows a faster query by accessing the file from a relevant position.
-```
-chr1  10000  20000 chr2  30000  50000  +  -
-chr1  30000  40000 chr3  10000  70000  +  -
-```
+  ```
+  chr1  10000  20000 chr2  30000  50000  +  -
+  chr1  30000  40000 chr3  10000  70000  +  -
+  ```
 * Rpairix is an R binder for `pairix` (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of `tabix` (https://github.com/samtools/tabix) and has been adapted to pairs and other common Hi-C data formats for 2D indexing and querying.
 
 ## Table of contents
