@@ -25,7 +25,7 @@ px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0, sc2 = 0,
 
 \item{ec2}{second end position column index (1-based). Zero (0) means not specified. If preset is given, preset overrides ec2. (default 0)}
 
-\item{delimiter}{delimiter (e.g. '\t' or ' ') (default '\t'). If preset is given, preset overrides delimiter.}
+\item{delimiter}{delimiter (e.g. '\\t' or ' ') (default '\\t'). If preset is given, preset overrides delimiter.}
 
 \item{comment_char}{comment character. Lines beginning with this character are skipped when creating an index. If preset is given, preset overrides comment_char (default '#')}
 

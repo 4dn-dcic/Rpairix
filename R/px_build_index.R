@@ -10,7 +10,7 @@
 #' @param sc2 second sequence (chromosome) column index (1-based). Zero (0) means not specified. If preset is given, preset overrides sc2. If sc, bc are specified but not sc2 and bc2, it is 1D-indexed. (default 0)
 #' @param bc2 second start position column index (1-based). Zero (0) means not specified. If preset is given, preset overrides bc2. (default 0)
 #' @param ec2 second end position column index (1-based). Zero (0) means not specified. If preset is given, preset overrides ec2. (default 0)
-#' @param delimiter delimiter (e.g. '\t' or ' ') (default '\t'). If preset is given, preset overrides delimiter.
+#' @param delimiter delimiter (e.g. '\\t' or ' ') (default '\\t'). If preset is given, preset overrides delimiter.
 #' @param comment_char comment character. Lines beginning with this character are skipped when creating an index. If preset is given, preset overrides comment_char (default '#')
 #' @param line_skip number of lines to skip in the beginning. (default 0) 
 #' @param force If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)
@@ -25,7 +25,9 @@
 #'
 #' @useDynLib Rpairix build_index
 px_build_index<-function(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec2=0, delimiter='\t', comment_char='#', line_skip=0, force=FALSE){
+
   if(!file.exists(filename)) { message("Cannot find input file."); return(-1); }
+
   sc=as.integer(sc)
   bc=as.integer(bc)
   ec=as.integer(ec)
