@@ -7,7 +7,7 @@
   chr1  10000  20000 chr2  30000  50000  +  -
   chr1  30000  40000 chr3  10000  70000  +  -
   ```
-* Rpairix is an R binder for `pairix` (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of `tabix` (https://github.com/samtools/tabix) and has been adapted to pairs and other common Hi-C data formats for 2D indexing and querying.
+* `Rpairix` is an R binder for `pairix` (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of `tabix` (https://github.com/samtools/tabix) and has been adapted to `pairs` and other common Hi-C data formats for 2D indexing and querying.
 
 ## Table of contents
 * [Installation](#installation)
