@@ -34,17 +34,18 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.0.9.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.0.zip")
 ```
 
 
 ## Available R functions
-`px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`
+`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`
 
 ## Usage
 ```
 library(Rpairix)
-px_query(filename,querystr) # query
+px_build_index(filename,preset) # indexing
+px_query(filename,querystr) # querying
 px_query(filename,querystr,linecount.only=TRUE) # number of output lines for the query
 px_keylist(filename) # list of keys (chromosome pairs)
 px_seqlist(filename) # list of chromosomes
@@ -60,7 +61,25 @@ px_endpos2_col(filename) # 1-based column index for mate2 end position
 px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
 ```
 
-### Query
+### Indexing
+```
+px_build_index(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec2=0, delimiter='\t', comment_char='#', line_skip=0, force=FALSE)
+```
+* `filename` is sometextfile.gz (bgzipped text file)
+* `preset` is one of the recognized formats: `gff`, `bed`, `sam`, `vcf`, `psltbl` (1D-indexing) or `pairs`, `merged_nodups`, `old_merged_nodups` (2D-indexing). If preset is '', at least some of the custom parameters must be given instead (`sc`, `bc`, `ec`, `sc2`, `bc2`, `ec2`, `delimiter`, `comment_char`, `line_skip`). (default '').  
+* `sc` : first sequence (chromosome) column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `sc`. If `preset` is not given, this one is required. (default 0)
+* `bc` : first start position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `bc`. If `preset` is not given, this one is required. (default 0)
+* `ec` : first end position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `ec`. (default 0)
+sc2 second sequence (chromosome) column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `sc2`. If `sc`, `bc` are specified but not `sc2` and `bc2`, it is 1D-indexed. (default 0)
+* `bc2` : second start position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `bc2`. (default 0)
+* `ec2` : second end position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `ec2`. (default 0)
+* `delimiter` : delimiter (e.g. '\t' or ' ') (default '\t'). If `preset` is given, `preset` overrides `delimiter`.
+* `comment_char` : comment character. Lines beginning with this character are skipped when creating an index. If `preset` is given, `preset` overrides `comment_char`. (default '#')
+* `line_skip` : number of lines to skip in the beginning. (default 0)
+* `force` : If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)
+* An index file sometextfile.gz.px2 will be created.
+
+### Querying
 ```
 px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE, autoflip=FALSE)
 ```
@@ -131,8 +150,13 @@ px_check_dim(filename)
 ```
 > library(Rpairix)
 >
-> # single-query
 > filename = "inst/test_4dn.pairs.gz"
+>
+> # indexing
+> px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
+> px_build_index(filename, 'pairs', force=TRUE)  # equivalent to the above line
+>
+> # single-query
 > querystr = "chr10:1-3000000|chr20"
 > res = px_query(filename,querystr)
 > print(res)
@@ -215,6 +239,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.1.0
+* `px_build_index` is added. (Now indexing can be done using Rpairix as well as querying.)
+
 ### 0.0.9
 * Multi-query now possible with function `px_query` (`querystr` can be a vector of strings).
 
