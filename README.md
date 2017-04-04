@@ -150,8 +150,13 @@ px_check_dim(filename)
 ```
 > library(Rpairix)
 >
-> # single-query
 > filename = "inst/test_4dn.pairs.gz"
+>
+> # indexing
+> px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
+> px_build_index(filename, 'pairs', force=TRUE)  # equivalent to the above line
+>
+> # single-query
 > querystr = "chr10:1-3000000|chr20"
 > res = px_query(filename,querystr)
 > print(res)
