@@ -63,10 +63,19 @@ px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -
 
 ### Indexing
 ```
-px_build_index(filename, preset, force=FALSE)
+px_build_index(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec2=0, delimiter='\t', comment_char='#', line_skip=0, force=FALSE)
 ```
 * `filename` is sometextfile.gz (bgzipped text file)
-* `preset` is one of the recognized formats: `gff`, `bed`, `sam`, `vcf`, `psltbl` (1D-indexing) or `pairs`, `merged_nodups`, `old_merged_nodups` (2D-indexing). (default `pairs`)
+* `preset` is one of the recognized formats: `gff`, `bed`, `sam`, `vcf`, `psltbl` (1D-indexing) or `pairs`, `merged_nodups`, `old_merged_nodups` (2D-indexing). If preset is '', at least some of the custom parameters must be given instead (`sc`, `bc`, `ec`, `sc2`, `bc2`, `ec2`, `delimiter`, `comment_char`, `line_skip`). (default '').  
+* `sc` : first sequence (chromosome) column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `sc`. If `preset` is not given, this one is required. (default 0)
+* `bc` : first start position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `bc`. If `preset` is not given, this one is required. (default 0)
+* `ec` : first end position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `ec`. (default 0)
+sc2 second sequence (chromosome) column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `sc2`. If `sc`, `bc` are specified but not `sc2` and `bc2`, it is 1D-indexed. (default 0)
+* `bc2` : second start position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `bc2`. (default 0)
+* `ec2` : second end position column index (1-based). Zero (0) means not specified. If `preset` is given, `preset` overrides `ec2`. (default 0)
+* `delimiter` : delimiter (e.g. '\t' or ' ') (default '\t'). If `preset` is given, `preset` overrides `delimiter`.
+* `comment_char` : comment character. Lines beginning with this character are skipped when creating an index. If `preset` is given, `preset` overrides `comment_char`. (default '#')
+* `line_skip` : number of lines to skip in the beginning. (default 0)
 * `force` : If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)
 * An index file sometextfile.gz.px2 will be created.
 
