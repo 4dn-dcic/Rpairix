@@ -1,8 +1,8 @@
 # Rpairix
 * Rpairix is an R package for indexing and querying on a block-compressed text file containing a pair of genomic coordinates.
-* Rpairix is an R binder for Pairix (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of tabix (https://github.com/samtools/tabix) as a tool for the 4DN-standard _pairs_ file format describing Hi-C data: https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md
-* However, it can be used as a generic tool for indexing and querying any [bgzipped](https://github.com/samtools/tabix) text file containing genomic coordinates, for either 2D- or 1D- indexing and querying.
-* For example, given a text file like below, you want to extract specific lines. An awk command, for example, would read the file from the beginning to the end. Rpairix creates an index and uses it to accesses the file from a relevant position by taking advantage of the bgzf compression, allowing for a fast query for large files.
+* It is an R binder for Pairix (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of tabix (https://github.com/samtools/tabix) as a tool for the 4DN-standard _pairs_ file format describing Hi-C data: https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md
+* However, Pairix/Rpairix can be used as a generic tool for indexing and querying any [bgzipped](https://github.com/samtools/tabix) text file containing genomic coordinates, for either 2D- or 1D- indexing and querying.
+* For example, given a text file like below, you want to extract specific lines. An awk command, for example, would read the file from the beginning to the end. Pairix/Rpairix creates an index and uses it to accesses the file from a relevant position by taking advantage of the bgzf compression, allowing for a fast query for large files.
 * Bgzip can be found in https://github.com/4dn-dcic/pairix or https://github.com/samtools/tabix (original).
 
   **Pairs format**
