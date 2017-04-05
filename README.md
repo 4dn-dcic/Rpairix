@@ -78,7 +78,7 @@ sc2 second sequence (chromosome) column index (1-based). Zero (0) means not spec
 * `line_skip` : number of lines to skip in the beginning. (default 0)
 * `force` : If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)
 * An index file sometextfile.gz.px2 will be created.
-* When neither `preset` nor `sc`(and `bc`) is given, the following file extensions are automatically recognized: `gff.gz`, `bed.gz`, `sam.gz`, `vcf.gz`, `psltbl.gz` (1D-indexing), `pairs.gz` (2D-indexing).
+* When neither `preset` nor `sc`(and `bc`) is given, the following file extensions are automatically recognized: `gff.gz`, `bed.gz`, `sam.gz`, `vcf.gz`, `psltbl.gz` (1D-indexing), and `pairs.gz` (2D-indexing).
 
 ### Querying
 ```
@@ -242,7 +242,7 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 ## Version history
 ### 0.1.1
-* `px_build_index`: When neither preset nor custom set of columns is given, file extensions automatically recognized for indexing.
+* `px_build_index`: When neither `preset` nor a custom set of columns is given, file extensions are automatically recognized for indexing.
 
 ### 0.1.0
 * `px_build_index` is added. (Now indexing can be done using Rpairix as well as querying.)
