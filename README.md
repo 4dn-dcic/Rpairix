@@ -79,45 +79,39 @@ px_get_column_names(filename) # returns a vector of column names, if available. 
 ```
 
 ## Example run
-```
+```r
 > library(Rpairix)
 >
-> filename = "inst/test_4dn.pairs.gz"
->
 > # indexing
-> px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
-> px_build_index(filename, 'pairs', force=TRUE)  # equivalent to the above line (except the above way will not recognize column headings during query)
-> px_build_index(filename, force=TRUE)  # equivalent to the above line, since file extension pairs.gz is recognized.
+> px_build_index("inst/test_4dn.pairs.gz", force=TRUE)
 >
 > # single-query
-> querystr = "chr10:1-3000000|chr20"
-> res = px_query(filename,querystr)
-> print(res)
+> px_query("inst/test_4dn.pairs.gz", "chr10:1-3000000|chr20")
                readID  chr1    pos1  chr2    pos2 strand1 strand2
 1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
 2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
 >
 > # line-count-only
-> n = px_query(filename,querystr, linecount.only=TRUE)
-> print(n)
+> px_query("inst/test_4dn.pairs.gz", "chr10:1-3000000|chr20", linecount.only=TRUE)
 > [1] 2
 >
 > # auto-flip
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
+> px_query("inst/test_4dn.pairs.gz", "chr20|chr10:1-3000000")
 data frame with 0 columns and 0 rows
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
+> px_query("inst/test_4dn.pairs.gz", "chr20|chr10:1-3000000", autoflip=TRUE)
                readID  chr1    pos1  chr2    pos2 strand1 strand2
 1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
 2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", linecount.only=TRUE)
+>
+> px_query("inst/test_4dn.pairs.gz", "chr20|chr10:1-3000000", linecount.only=TRUE)
 [1] 0
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
+> px_query("inst/test_4dn.pairs.gz", "chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
 [1] 2
 >
 > # multi-query
-> querystr = c("chr10|chr20","chr2|chr20")
-> n = px_query(filename,querystr, linecount.only=TRUE)
-> print(n)
+> multi_querystr = c("chr10|chr20","chr2|chr20")
+> px_query("inst/test_4dn.pairs.gz", multi_querystr, linecount.only=TRUE)
+[1] 104
 >
 > # getting list of chromosome pairs and chromosomes
 > keys = px_keylist(filename)
