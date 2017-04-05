@@ -290,10 +290,6 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
    PROTECT(_r_presultstr = allocVector(VECSXP, *pn));
    int flag=0;
 
-   int len=-1;
-   char *s;
-   int k=0;
-
    pairix_t *tb = load(*pfn);
 
    int ncols=0; 
@@ -303,6 +299,8 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
      int i, ires=0;  // i is index for querystr, ires is index for result line
      for(i=0;i<*pnquery;i++){
        ti_iter_t iter = ti_querys_2d(tb, pquerystr[i]);
+       char *s;
+       int len=-1,k=0;
        while ((s = ti_read(tb, iter, &len)) != 0) {
          int j,start=0,m=0; // j is position on result line, start is start position of the current column, m is the index of the current column
          if(ncols==0) for(j=0;j<=len;j++) if(s[j]==pconf->delimiter||s[j]==0) ncols++;

@@ -173,9 +173,9 @@ px_get_column_names(filename)
 > querystr = "chr10:1-3000000|chr20"
 > res = px_query(filename,querystr)
 > print(res)
-                   V1    V2      V3    V4      V5 V6 V7
-1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
-2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
+               readID  chr1    pos1  chr2    pos2 strand1 strand2
+1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
 >
 > # line-count-only
 > n = px_query(filename,querystr, linecount.only=TRUE)
@@ -186,9 +186,9 @@ px_get_column_names(filename)
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
 data frame with 0 columns and 0 rows
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
-                   V1    V2      V3    V4      V5 V6 V7
-1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
-2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
+               readID  chr1    pos1  chr2    pos2 strand1 strand2
+1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", linecount.only=TRUE)
 [1] 0
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
@@ -238,6 +238,10 @@ data frame with 0 columns and 0 rows
 > # checking if the file is 1D-indexed or 2D-indexed
 > px_check_dim("inst/test_4dn.pairs.gz")
 [1] 2
+>
+> # get column names
+> px_get_column_names("inst/test_4dn.pairs.gz")
+[1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
 ```
 
 

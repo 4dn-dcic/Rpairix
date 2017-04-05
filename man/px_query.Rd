@@ -46,7 +46,7 @@ querystr = "chr20"
 res = px_query(filename, querystr, autoflip=TRUE)
 print(res)
 
-filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
+filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz", package="Rpairix")
 querystr = "10:1-1000000|20"
 res = px_query(filename, querystr)
 print(res)
