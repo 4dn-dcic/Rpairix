@@ -1,8 +1,9 @@
 # Rpairix
-* Rpairix is an R package for indexing and querying on a compressed text file.
-* Rpairix was developed as a tool for the 4DN-standard _pairs_ file format describing Hi-C data: https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md
-* However, it can be used as a generic tool for indexing and querying any bgzipped text file containing genomic coordinates, for either 2D- or 1D-indexing.
-* For example, given a text file with a million lines like below, you want to extract lines where the first coordinate is chr10 and the second is between positions 10,000,000 and 20,000,000 on chrX. An awk command would read the file from the beginning to the end. Rpairix allows a faster query by accessing the file from a relevant position.
+* Rpairix is an R package for indexing and querying on a block-compressed text file containing a pair of genomic coordinates.
+* Rpairix is an R binder for Pairix (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of `tabix` (https://github.com/samtools/tabix) as a tool for the 4DN-standard _pairs_ file format describing Hi-C data: https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md
+* However, it can be used as a generic tool for indexing and querying any [bgzipped](https://github.com/samtools/tabix) text file containing genomic coordinates, for either 2D- or 1D- indexing and querying.
+* For example, given a text file like below, you want to extract specific lines. An awk command, for example, would read the file from the beginning to the end. Rpairix creates an index and uses it to accesses the file from a relevant position by taking advantage of the bgzf compression, allowing for a fast query for large files.
+* Bgzip can be found in https://github.com/4dn-dcic/pairix or https://github.com/samtools/tabix (original).
 
   **Pairs format**
   ```
@@ -23,7 +24,7 @@
   chr1  10000  20000 chr2  30000  50000  3.5
   chr1  30000  40000 chr3  10000  70000  4.6
   ```
-* `Rpairix` is an R binder for `pairix` (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of `tabix` (https://github.com/samtools/tabix) and has been adapted to `pairs` and other common Hi-C data formats for 2D indexing and querying.
+
 
 ## Table of contents
 * [Installation](#installation)
