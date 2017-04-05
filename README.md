@@ -4,7 +4,7 @@
 * However, it can be used as a generic tool for indexing and querying any bgzipped text file containing genomic coordinates, for either 2D- or 1D-indexing.
 * For example, given a text file with a million lines like below, you want to extract lines where the first coordinate is chr10 and the second is between positions 10,000,000 and 20,000,000 on chrX. An awk command would read the file from the beginning to the end. `Rpairix` allows a faster query by accessing the file from a relevant position.
 
-  `Pairs` format
+  **Pairs format**
   ```
   ## pairs format v1.0
   #sorted: chr1-chr2-pos1-pos2
@@ -18,7 +18,7 @@
   EAS139:136:FC706VJ:2:1286:25:275154 chr1 30000 chr3 40000 + -
   ```
   
-  Custom text file
+  **Custom text file**
   ```
   chr1  10000  20000 chr2  30000  50000  3.5
   chr1  30000  40000 chr3  10000  70000  4.6
