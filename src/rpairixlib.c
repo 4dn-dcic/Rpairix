@@ -287,24 +287,37 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
 
    // to be return values
    SEXP _r_presultstr;
-   PROTECT(_r_presultstr = allocVector(STRSXP, *pn));
+   PROTECT(_r_presultstr = allocVector(VECSXP, *pn));
    int flag=0;
 
    int len=-1;
-   const char *s;
+   char *s;
    int k=0;
 
    pairix_t *tb = load(*pfn);
 
+   int ncols=0; 
+   SEXP _r_presultstr_line[*pn];
    if(tb){
-     int i;
+     const ti_conf_t *pconf = ti_get_conf(tb->idx);
+     int i, ires=0;  // i is index for querystr, ires is index for result line
      for(i=0;i<*pnquery;i++){
        ti_iter_t iter = ti_querys_2d(tb, pquerystr[i]);
        while ((s = ti_read(tb, iter, &len)) != 0) {
-         SET_STRING_ELT(_r_presultstr, k++, mkChar(s)); 
+         int j,start=0,m=0; // j is position on result line, start is start position of the current column, m is the index of the current column
+         if(ncols==0) for(j=0;j<=len;j++) if(s[j]==pconf->delimiter||s[j]==0) ncols++;
+         PROTECT(_r_presultstr_line[ires] = allocVector(STRSXP, ncols));
+         for(j=0;j<=len;j++){
+            if(s[j]==pconf->delimiter || s[j]==0) { 
+              s[j]=0;
+              SET_STRING_ELT(_r_presultstr_line[ires], m++, mkChar(s+start));
+              s[j]=pconf->delimiter; start=j+1;
+            }
+         }
+         SET_VECTOR_ELT(_r_presultstr, k++, _r_presultstr_line[ires]); 
+         ires++;
        }
      }
-
      ti_close(tb);
    }
    else flag = -1; // error
@@ -323,7 +336,7 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
 
    SET_VECTOR_ELT(_r_preturn, 1, _r_preturn_flag);
 
-   UNPROTECT(7);
+   UNPROTECT(7+*pn);
    return(_r_preturn);
 }
 

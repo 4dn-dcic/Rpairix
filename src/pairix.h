@@ -36,8 +36,8 @@
 #define TI_PRESET_SAM     1
 #define TI_PRESET_VCF     2
 #define TI_PRESET_PAIRS     3
-#define TI_PRESET_MERGED_NODUPS     0
-#define TI_PRESET_OLD_MERGED_NODUPS     0
+#define TI_PRESET_MERGED_NODUPS     4
+#define TI_PRESET_OLD_MERGED_NODUPS     5
 
 #define TI_FLAG_UCSC      0x10000
 

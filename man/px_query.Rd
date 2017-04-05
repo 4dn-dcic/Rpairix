@@ -20,6 +20,9 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
 
 \item{autoflip}{If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.}
 }
+\value{
+data frame containing the query result. Column names are added if indexing was done with a pairs preset.
+}
 \description{
 This function allows you to query a 2D range in a pairix-indexed pairs file.
 }

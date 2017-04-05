@@ -9,6 +9,7 @@
 #' @param linecount.only If TRUE, the function returns an integer corresponding to the number of output lines instead of the actual query result. (default FALSE) 
 #' @param autoflip If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.
 #'
+#' @return data frame containing the query result. Column names are added if indexing was done with a pairs preset.
 #' @keywords pairix query 2D
 #' @export px_query
 #' @examples
@@ -96,7 +97,8 @@ px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE
   if(out2[[2]][1] == -1) return(NULL)  ## error
 
   ## tabularize
-  res.table = as.data.frame(do.call("rbind",strsplit(out2[[1]],'\t')),stringsAsFactors=stringsAsFactors)
+  ##res.table = as.data.frame(do.call("rbind",strsplit(out2[[1]],'\t')),stringsAsFactors=stringsAsFactors)
+  res.table = as.data.frame(do.call("rbind",out2[[1]]),stringsAsFactors=stringsAsFactors)
   cols = px_get_column_names(filename)
   if(!is.null(cols) && length(cols)==ncol(res.table)) colnames(res.table)=cols; 
 
