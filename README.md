@@ -34,12 +34,12 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.1.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.2.zip")
 ```
 
 
 ## Available R functions
-`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`
+`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
 
 ## Usage
 ```
@@ -59,6 +59,7 @@ px_startpos2_col(filename) # 1-based column index for mate2 start position
 px_endpos1_col(filename) # 1-based column index for mate1 end position
 px_endpos2_col(filename) # 1-based column index for mate2 end position
 px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
+px_get_column_names(filename) # returns a vector of column names, if available. (works only for pairs format)
 ```
 
 ### Indexing
@@ -146,6 +147,16 @@ px_check_dim(filename)
 ```
 * `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is an integer; 1 if the input file is 1D-indexed, 2 if 2D-indexed, -1 if an error occurred.
+
+### Getting column names
+```
+px_get_column_names(filename)
+```
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist
+* The return value is a vector of column names.
+* Returns values only if the indexing must have been done with 'pairs' preset (either explicitly by setting a preset or by file extension recognition) and if the column heading information is available.
+
+***
 
 ## Example run
 ```
@@ -241,6 +252,11 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.1.2
+* Function `px_get_column_names` is now added.
+* `px_query` now adds column names for the query result if indexing was done with pairs preset.
+* `px_query`: problem of merged_nodups query result not splitting by space is now fixed.
+
 ### 0.1.1
 * `px_build_index`: When neither `preset` nor a custom set of columns is given, file extensions are automatically recognized for indexing.
 
