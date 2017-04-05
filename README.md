@@ -34,7 +34,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.0.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.1.zip")
 ```
 
 
@@ -78,6 +78,7 @@ sc2 second sequence (chromosome) column index (1-based). Zero (0) means not spec
 * `line_skip` : number of lines to skip in the beginning. (default 0)
 * `force` : If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)
 * An index file sometextfile.gz.px2 will be created.
+* When neither `preset` nor `sc`(and `bc`) is given, the following file extensions are automatically recognized: `gff.gz`, `bed.gz`, `sam.gz`, `vcf.gz`, `psltbl.gz` (1D-indexing), and `pairs.gz` (2D-indexing).
 
 ### Querying
 ```
@@ -155,6 +156,7 @@ px_check_dim(filename)
 > # indexing
 > px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
 > px_build_index(filename, 'pairs', force=TRUE)  # equivalent to the above line
+> px_build_index(filename, force=TRUE)  # equivalent to the above line, since file extension pairs.gz is recognized.
 >
 > # single-query
 > querystr = "chr10:1-3000000|chr20"
@@ -239,6 +241,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.1.1
+* `px_build_index`: When neither `preset` nor a custom set of columns is given, file extensions are automatically recognized for indexing.
+
 ### 0.1.0
 * `px_build_index` is added. (Now indexing can be done using Rpairix as well as querying.)
 

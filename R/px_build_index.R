@@ -40,6 +40,7 @@ px_build_index<-function(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec
   if(out[[13]][1] == -2) { message("Can't recognize preset."); return(-1); }
   if(out[[13]][1] == -3) { message("Was bgzip used to compress this file?"); return(-1); }
   if(out[[13]][1] == -4) { message("The index file exists. Please use force=TRUE to overwrite"); return(-1); }
+  if(out[[13]][1] == -5) { message("Can't recognize file type, with no preset specified."); return(-1); }
   return(0);
 }
 

@@ -15,7 +15,7 @@
 #' 
 #' ## 2D-indexed file
 #' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-#' querystr = c("chr10|chr20","chr2|chr2")
+#' querystr = c("chr10|chr20","chr22|chr22")
 #' res = px_query(filename, querystr)
 #' print(res)
 #'
@@ -48,7 +48,7 @@
 #'
 #' ## 1D-indexed file
 #' filename = system.file(".","SRR1171591.variants.snp.vqsr.p.vcf.gz", package="Rpairix")
-#' querystr = 'chr10'
+#' querystr = 'chr10|5000000-20000000'
 #' res = px_query(filename, querystr)
 #' print(res)
 #' 
