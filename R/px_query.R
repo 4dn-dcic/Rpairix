@@ -97,6 +97,9 @@ px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE
 
   ## tabularize
   res.table = as.data.frame(do.call("rbind",strsplit(out2[[1]],'\t')),stringsAsFactors=stringsAsFactors)
+  cols = px_get_column_names(filename)
+  if(!is.null(cols) && length(cols)==ncol(res.table)) colnames(res.table)=cols; 
+
   return (res.table)
 }
 
