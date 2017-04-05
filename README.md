@@ -18,7 +18,7 @@
   EAS139:136:FC706VJ:2:1286:25:275154 chr1 30000 chr3 40000 + -
   ```
   
-  **Custom text file**
+  **Some custom text file**
   ```
   chr1  10000  20000 chr2  30000  50000  3.5
   chr1  30000  40000 chr3  10000  70000  4.6
