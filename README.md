@@ -43,13 +43,13 @@ install_github("4dn-dcic/Rpairix")
 If you have a problem loading the `Rpairix.so` file ('undefined symbol' error), try adding `PKG_LIBS = -lz` to `~/.R/Makevars`. This way, zlib will be linked during compilation.
 
 Alternatively,
-```
+```bash
 git clone https://github.com/4dn-dcic/Rpairix/
 cd Rpairix
 R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests .
 ```
 To install a specific version,
-```
+```r
 library(devtools)
 install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.2.zip")
 ```
@@ -58,7 +58,7 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.2.zip")
 ## Available R functions
 `px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
 
-```
+```r
 library(Rpairix)
 px_build_index(filename,preset) # indexing
 px_query(filename,querystr) # querying
