@@ -10,7 +10,7 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
 
-\item{querystr}{a pair of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")}
+\item{querystr}{a character vector containing a list of pairs of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")}
 
 \item{max_mem}{the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.}
 
@@ -20,26 +20,55 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
 
 \item{autoflip}{If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.}
 }
+\value{
+data frame containing the query result. Column names are added if indexing was done with a pairs preset.
+}
 \description{
 This function allows you to query a 2D range in a pairix-indexed pairs file.
 }
 \examples{
+
+## 2D-indexed file
 filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-querystr = "chrX|chrX"
+querystr = c("chr10|chr20","chr22|chr22")
 res = px_query(filename, querystr)
 print(res)
 
 n = px_query(filename, querystr, linecount.only=TRUE)
 print(n) 
 
-filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
+querystr = "chr20|chr10"
+res = px_query(filename, querystr, autoflip=TRUE)
+print(res)
+
+## the following attempts will return NULL and give you a warning message.
+querystr = "chr20"
+res = px_query(filename, querystr, autoflip=TRUE)
+print(res)
+
+filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz", package="Rpairix")
 querystr = "10:1-1000000|20"
 res = px_query(filename, querystr)
+print(res)
+
+## the following attempts will return NULL and give you a warning message.
+res = px_query(filename, querystr, autoflip=TRUE)
 print(res)
 
 filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
 package="Rpairix")
 querystr = "10:1-1000000|20"
+res = px_query(filename, querystr)
+print(res)
+
+## 1D-indexed file
+filename = system.file(".","SRR1171591.variants.snp.vqsr.p.vcf.gz", package="Rpairix")
+querystr = 'chr10|5000000-20000000'
+res = px_query(filename, querystr)
+print(res)
+
+## the following attempts will return NULL and give you a warning message.
+querystr = 'chr10|chr20'
 res = px_query(filename, querystr)
 print(res)
 
