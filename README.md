@@ -34,12 +34,12 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.1.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.2.zip")
 ```
 
 
 ## Available R functions
-`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`
+`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
 
 ## Usage
 ```
@@ -59,6 +59,7 @@ px_startpos2_col(filename) # 1-based column index for mate2 start position
 px_endpos1_col(filename) # 1-based column index for mate1 end position
 px_endpos2_col(filename) # 1-based column index for mate2 end position
 px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
+px_get_column_names(filename) # returns a vector of column names, if available. (works only for pairs format)
 ```
 
 ### Indexing
@@ -147,6 +148,16 @@ px_check_dim(filename)
 * `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is an integer; 1 if the input file is 1D-indexed, 2 if 2D-indexed, -1 if an error occurred.
 
+### Getting column names
+```
+px_get_column_names(filename)
+```
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist
+* The return value is a vector of column names.
+* Returns values only if the indexing must have been done with 'pairs' preset (either explicitly by setting a preset or by file extension recognition) and if the column heading information is available.
+
+***
+
 ## Example run
 ```
 > library(Rpairix)
@@ -162,9 +173,9 @@ px_check_dim(filename)
 > querystr = "chr10:1-3000000|chr20"
 > res = px_query(filename,querystr)
 > print(res)
-                   V1    V2      V3    V4      V5 V6 V7
-1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
-2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
+               readID  chr1    pos1  chr2    pos2 strand1 strand2
+1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
 >
 > # line-count-only
 > n = px_query(filename,querystr, linecount.only=TRUE)
@@ -175,9 +186,9 @@ px_check_dim(filename)
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
 data frame with 0 columns and 0 rows
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
-                   V1    V2      V3    V4      V5 V6 V7
-1 SRR1658581.51740952 chr10  157600 chr20  167993  -  -
-2 SRR1658581.33457260 chr10 2559777 chr20 7888262  -  +
+               readID  chr1    pos1  chr2    pos2 strand1 strand2
+1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", linecount.only=TRUE)
 [1] 0
 > px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
@@ -227,6 +238,10 @@ data frame with 0 columns and 0 rows
 > # checking if the file is 1D-indexed or 2D-indexed
 > px_check_dim("inst/test_4dn.pairs.gz")
 [1] 2
+>
+> # get column names
+> px_get_column_names("inst/test_4dn.pairs.gz")
+[1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
 ```
 
 
@@ -241,6 +256,11 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 
 ## Version history
+### 0.1.2
+* Function `px_get_column_names` is now added.
+* `px_query` now adds column names for the query result if indexing was done with pairs preset.
+* `px_query`: problem of merged_nodups query result not splitting by space is now fixed.
+
 ### 0.1.1
 * `px_build_index`: When neither `preset` nor a custom set of columns is given, file extensions are automatically recognized for indexing.
 

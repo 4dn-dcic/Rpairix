@@ -20,6 +20,9 @@ px_query(filename, querystr, max_mem = 1e+08, stringsAsFactors = FALSE,
 
 \item{autoflip}{If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.}
 }
+\value{
+data frame containing the query result. Column names are added if indexing was done with a pairs preset.
+}
 \description{
 This function allows you to query a 2D range in a pairix-indexed pairs file.
 }
@@ -27,7 +30,7 @@ This function allows you to query a 2D range in a pairix-indexed pairs file.
 
 ## 2D-indexed file
 filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-querystr = c("chr10|chr20","chr2|chr2")
+querystr = c("chr10|chr20","chr22|chr22")
 res = px_query(filename, querystr)
 print(res)
 
@@ -43,7 +46,7 @@ querystr = "chr20"
 res = px_query(filename, querystr, autoflip=TRUE)
 print(res)
 
-filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz", package="Rpairix")
+filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz", package="Rpairix")
 querystr = "10:1-1000000|20"
 res = px_query(filename, querystr)
 print(res)
@@ -60,7 +63,7 @@ print(res)
 
 ## 1D-indexed file
 filename = system.file(".","SRR1171591.variants.snp.vqsr.p.vcf.gz", package="Rpairix")
-querystr = 'chr10'
+querystr = 'chr10|5000000-20000000'
 res = px_query(filename, querystr)
 print(res)
 

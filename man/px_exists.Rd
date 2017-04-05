@@ -20,7 +20,7 @@ key = "chrX|chrX"
 res = px_exists(filename, key)
 print(res)
 
-filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
+filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",package="Rpairix")
 key = "10|20"
 res = px_exists(filename, key)
 print(res)

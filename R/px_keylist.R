@@ -11,7 +11,7 @@
 #' res = px_keylist(filename)
 #' print(res)
 #'
-#' filename = system.file(".","merged_nodup.tab.chrblock_sorted.txt.gz",package="Rpairix")
+#' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",package="Rpairix")
 #' res = px_keylist(filename)
 #' print(res)
 #'
