@@ -3,17 +3,33 @@
 * `Rpairix` was developed as a tool for the 4DN-standard `pairs` file format describing Hi-C data: https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md
 * However, it can be used as a generic tool for indexing and querying any bgzipped text file containing genomic coordinates, for either 2D- or 1D-indexing.
 * For example, given a text file with a million lines like below, you want to extract lines where the first coordinate is chr10 and the second is between positions 10,000,000 and 20,000,000 on chrX. An awk command would read the file from the beginning to the end. `Rpairix` allows a faster query by accessing the file from a relevant position.
+
+  `Pairs` format
   ```
-  chr1  10000  20000 chr2  30000  50000  +  -
-  chr1  30000  40000 chr3  10000  70000  +  -
+  ## pairs format v1.0
+  #sorted: chr1-chr2-pos1-pos2
+  #shape: upper triangle
+  #chromosomes: chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX chrY chrM
+  #genome_assembly: hg38
+  #columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+  EAS139:136:FC706VJ:2:2104:23462:197393 chr1 10000 chr1 20000 + +
+  EAS139:136:FC706VJ:2:8762:23765:128766 chr1 50000 chr1 70000 + +
+  EAS139:136:FC706VJ:2:2342:15343:9863 chr1 60000 chr2 10000 + + 
+  EAS139:136:FC706VJ:2:1286:25:275154 chr1 30000 chr3 40000 + -
+  ```
+  
+  Custom text file
+  ```
+  chr1  10000  20000 chr2  30000  50000  3.5
+  chr1  30000  40000 chr3  10000  70000  4.6
   ```
 * `Rpairix` is an R binder for `pairix` (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of `tabix` (https://github.com/samtools/tabix) and has been adapted to `pairs` and other common Hi-C data formats for 2D indexing and querying.
 
 ## Table of contents
 * [Installation](#installation)
 * [Available R functions](#available-r-functions)
-* [Usage](#usage)
 * [Example run](#example-run)
+* [Usage](#usage)
 * [For developers](#for-developers)
 * [Version history](#version-history)
 
@@ -41,7 +57,6 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.2.zip")
 ## Available R functions
 `px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
 
-## Usage
 ```
 library(Rpairix)
 px_build_index(filename,preset) # indexing
@@ -61,6 +76,96 @@ px_endpos2_col(filename) # 1-based column index for mate2 end position
 px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
 px_get_column_names(filename) # returns a vector of column names, if available. (works only for pairs format)
 ```
+
+## Example run
+```
+> library(Rpairix)
+>
+> filename = "inst/test_4dn.pairs.gz"
+>
+> # indexing
+> px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
+> px_build_index(filename, 'pairs', force=TRUE)  # equivalent to the above line (except the above way will not recognize column headings during query)
+> px_build_index(filename, force=TRUE)  # equivalent to the above line, since file extension pairs.gz is recognized.
+>
+> # single-query
+> querystr = "chr10:1-3000000|chr20"
+> res = px_query(filename,querystr)
+> print(res)
+               readID  chr1    pos1  chr2    pos2 strand1 strand2
+1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
+>
+> # line-count-only
+> n = px_query(filename,querystr, linecount.only=TRUE)
+> print(n)
+> [1] 2
+>
+> # auto-flip
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
+data frame with 0 columns and 0 rows
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
+               readID  chr1    pos1  chr2    pos2 strand1 strand2
+1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
+2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", linecount.only=TRUE)
+[1] 0
+> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
+[1] 2
+>
+> # multi-query
+> querystr = c("chr10|chr20","chr2|chr20")
+> n = px_query(filename,querystr, linecount.only=TRUE)
+> print(n)
+>
+> # getting list of chromosome pairs and chromosomes
+> keys = px_keylist(filename)
+> length(keys)
+[1] 800
+> keys[1:10]
+ [1] "chr1|chr1"            "chr1|chr10"           "chr1|chr11"          
+ [4] "chr1|chr12"           "chr1|chr13"           "chr1|chr14"          
+ [7] "chr1|chr15"           "chr1|chr16"           "chr1|chr17"          
+[10] "chr1|chr17_ctg5_hap1"
+> chrs = px_seqlist(filename)
+> length(chrs)
+[1] 82
+> chrs[1:10]
+ [1] "chr1"                  "chr1_gl000191_random"  "chr1_gl000192_random" 
+ [4] "chr10"                 "chr11"                 "chr11_gl000202_random"
+ [7] "chr12"                 "chr13"                 "chr14"                
+[10] "chr15"                
+> 
+> # checking if a key (chromosome pair for 2D-indexed file or chromosome for 1D-indexed file) exists
+> px_exists(filename, "chr10|chr20")
+[1] 1
+>
+> # getting colum indices
+> px_chr1_col("inst/test_4dn.pairs.gz")
+[1] 2
+> px_chr2_col("inst/test_4dn.pairs.gz")
+[1] 4
+> px_startpos1_col("inst/test_4dn.pairs.gz")
+[1] 3
+> px_startpos2_col("inst/test_4dn.pairs.gz")
+[1] 5
+> px_endpos1_col("inst/test_4dn.pairs.gz")
+[1] 3
+> px_endpos2_col("inst/test_4dn.pairs.gz")
+[1] 5
+> 
+> # checking if the file is 1D-indexed or 2D-indexed
+> px_check_dim("inst/test_4dn.pairs.gz")
+[1] 2
+>
+> # get column names
+> px_get_column_names("inst/test_4dn.pairs.gz")
+[1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
+```
+
+***
+
+## Usage
 
 ### Indexing
 ```
@@ -158,91 +263,6 @@ px_get_column_names(filename)
 
 ***
 
-## Example run
-```
-> library(Rpairix)
->
-> filename = "inst/test_4dn.pairs.gz"
->
-> # indexing
-> px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
-> px_build_index(filename, 'pairs', force=TRUE)  # equivalent to the above line
-> px_build_index(filename, force=TRUE)  # equivalent to the above line, since file extension pairs.gz is recognized.
->
-> # single-query
-> querystr = "chr10:1-3000000|chr20"
-> res = px_query(filename,querystr)
-> print(res)
-               readID  chr1    pos1  chr2    pos2 strand1 strand2
-1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
-2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
->
-> # line-count-only
-> n = px_query(filename,querystr, linecount.only=TRUE)
-> print(n)
-> [1] 2
->
-> # auto-flip
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000")
-data frame with 0 columns and 0 rows
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE)
-               readID  chr1    pos1  chr2    pos2 strand1 strand2
-1 SRR1658581.51740952 chr10  157600 chr20  167993       -       -
-2 SRR1658581.33457260 chr10 2559777 chr20 7888262       -       +
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", linecount.only=TRUE)
-[1] 0
-> px_query("inst/test_4dn.pairs.gz","chr20|chr10:1-3000000", autoflip=TRUE, linecount.only=TRUE)
-[1] 2
->
-> # multi-query
-> querystr = c("chr10|chr20","chr2|chr20")
-> n = px_query(filename,querystr, linecount.only=TRUE)
-> print(n)
->
-> # getting list of chromosome pairs and chromosomes
-> keys = px_keylist(filename)
-> length(keys)
-[1] 800
-> keys[1:10]
- [1] "chr1|chr1"            "chr1|chr10"           "chr1|chr11"          
- [4] "chr1|chr12"           "chr1|chr13"           "chr1|chr14"          
- [7] "chr1|chr15"           "chr1|chr16"           "chr1|chr17"          
-[10] "chr1|chr17_ctg5_hap1"
-> chrs = px_seqlist(filename)
-> length(chrs)
-[1] 82
-> chrs[1:10]
- [1] "chr1"                  "chr1_gl000191_random"  "chr1_gl000192_random" 
- [4] "chr10"                 "chr11"                 "chr11_gl000202_random"
- [7] "chr12"                 "chr13"                 "chr14"                
-[10] "chr15"                
-> 
-> # checking if a key (chromosome pair for 2D-indexed file or chromosome for 1D-indexed file) exists
-> px_exists(filename, "chr10|chr20")
-[1] 1
->
-> # getting colum indices
-> px_chr1_col("inst/test_4dn.pairs.gz")
-[1] 2
-> px_chr2_col("inst/test_4dn.pairs.gz")
-[1] 4
-> px_startpos1_col("inst/test_4dn.pairs.gz")
-[1] 3
-> px_startpos2_col("inst/test_4dn.pairs.gz")
-[1] 5
-> px_endpos1_col("inst/test_4dn.pairs.gz")
-[1] 3
-> px_endpos2_col("inst/test_4dn.pairs.gz")
-[1] 5
-> 
-> # checking if the file is 1D-indexed or 2D-indexed
-> px_check_dim("inst/test_4dn.pairs.gz")
-[1] 2
->
-> # get column names
-> px_get_column_names("inst/test_4dn.pairs.gz")
-[1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
-```
 
 
 ## For developers
@@ -254,11 +274,12 @@ document()
 ```
 Individual R functions are written and documented in `R/`. The `src/rpairixlib.c` is the main C source file. Raw data files are under `inst/`.
 
+***
 
 ## Version history
 ### 0.1.2
 * Function `px_get_column_names` is now added.
-* `px_query` now adds column names for the query result if indexing was done with pairs preset.
+* `px_query` now adds column names for the query result if indexing was done with `pairs` preset.
 * `px_query`: problem of merged_nodups query result not splitting by space is now fixed.
 
 ### 0.1.1
