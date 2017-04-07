@@ -50,7 +50,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.2.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.3.zip")
 ```
 
 
@@ -277,6 +277,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.1.3
+* `px_query`: fixed a new problem (since 0.1.2) with multi-query returning only the last query result.
+
 ### 0.1.2
 * Function `px_get_column_names` is now added.
 * `px_query` now adds column names for the query result if indexing was done with `pairs` preset.
