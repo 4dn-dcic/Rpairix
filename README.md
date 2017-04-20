@@ -68,7 +68,7 @@ px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
 px_seq2list(filename) # list of second chromosomes
 px_exists(filename,key) # check if a key exists
-px_exists(filename,chr1,chr2) # check if a chromosome pair exists in a 2D-indexed file
+px_exists2(filename,chr1,chr2) # check if a chromosome pair exists in a 2D-indexed file
 px_chr1_col(filename) # 1-based column index for mate1 chromosome
 px_chr2_col(filename) # 1-based column index for mate2 chromosome
 px_startpos1_col(filename) # 1-based column index for mate1 start position
