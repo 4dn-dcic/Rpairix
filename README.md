@@ -56,7 +56,7 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.3.zip")
 
 
 ## Available R functions
-`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
+`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
 
 ```r
 library(Rpairix)
@@ -68,6 +68,7 @@ px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
 px_seq2list(filename) # list of second chromosomes
 px_exists(filename,key) # check if a key exists
+px_exists(filename,chr1,chr2) # check if a chromosome pair exists in a 2D-indexed file
 px_chr1_col(filename) # 1-based column index for mate1 chromosome
 px_chr2_col(filename) # 1-based column index for mate2 chromosome
 px_startpos1_col(filename) # 1-based column index for mate1 start position
@@ -133,6 +134,8 @@ data frame with 0 columns and 0 rows
 > 
 > # checking if a key (chromosome pair for 2D-indexed file or chromosome for 1D-indexed file) exists
 > px_exists(filename, "chr10|chr20")
+[1] 1
+> px_exists2(filename, "chr10", "chr20")
 [1] 1
 >
 > # getting colum indices
@@ -228,6 +231,14 @@ px_exists(filename, key)
 * `key` is a chromosome pair (or a chromosome for 1D)
 * The return value is 1 (exists), 0 (not exist), or -1 (error)
 
+```
+px_exists2(filename, chr1, chr2)
+```
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* chr1 and chr2 are the two chromosomes in the pair (in the same order)
+* The return value is 1 (exists), 0 (not exist), or -1 (error)
+* The function is applicable only for 2D-indexed file.
+
 ### Returns 1-based column indices
 ```
 px_chr1_col(filename)
@@ -272,6 +283,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.1.4
+* `px_exists2` is now added. It checks whether a chromosome pair exists by taking query chromosomes without the separator ('chr1','chr2') instead of ('chr1|chr2'). 
+
 ### 0.1.3
 * `px_query`: fixed a new problem (since 0.1.2) with multi-query returning only the last query result.
 
