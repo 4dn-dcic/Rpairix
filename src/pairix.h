@@ -32,6 +32,8 @@
 #include "kstring.h"
 #include "bgzf.h"
 
+#define REGION_SPLIT_CHARACTER   '|'
+
 #define TI_PRESET_GENERIC 0
 #define TI_PRESET_SAM     1
 #define TI_PRESET_VCF     2
@@ -95,7 +97,7 @@ typedef struct {
 } sequential_iter_t;
 
 
-extern ti_conf_t ti_conf_gff, ti_conf_bed, ti_conf_psltbl, ti_conf_vcf, ti_conf_sam, ti_conf_pairs, ti_conf_merged_nodups, ti_conf_old_merged_nodups; // preset
+extern ti_conf_t ti_conf_null, ti_conf_gff, ti_conf_bed, ti_conf_psltbl, ti_conf_vcf, ti_conf_sam, ti_conf_pairs, ti_conf_merged_nodups, ti_conf_old_merged_nodups; // preset
 
 #ifdef __cplusplus
 extern "C" {

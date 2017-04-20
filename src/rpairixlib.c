@@ -124,62 +124,6 @@ void check_1d_vs_2d(char** pfn, int* pflag){
 }
 
 
-SEXP setInt() {
-   SEXP myint;
-   int *p_myint;
-   int len = 5;
-
-   // Allocating storage space:
-   PROTECT(myint = NEW_INTEGER(len));  
-   p_myint = INTEGER_POINTER(myint);
-   p_myint[0] = 7;
-   UNPROTECT(1);
-   return myint;
-}
-
-SEXP getChar(SEXP mychar) {
-  char *Pmychar[5];  // array of 5 pointers 
-                       // to character strings
-
-  PROTECT(mychar = AS_CHARACTER(mychar)); 
-
-  // allocate memory:
-  Pmychar[0] = R_alloc(strlen(CHAR(STRING_ELT(mychar, 0))), sizeof(char)); 
-  Pmychar[1] = R_alloc(strlen(CHAR(STRING_ELT(mychar, 1))), sizeof(char)); 
-
-  // ... and copy mychar to Pmychar: 
-  strcpy(Pmychar[0], CHAR(STRING_ELT(mychar, 0))); 
-  strcpy(Pmychar[1], CHAR(STRING_ELT(mychar, 1))); 
-
-  printf(" Printed from C:");
-  printf(" %s %s \n",Pmychar[0],Pmychar[1]);
-  UNPROTECT(1);
-  return(R_NilValue); 
-}
-
-
-SEXP getChar2(SEXP mychar, SEXP mypn) {
-  PROTECT(mypn = AS_INTEGER(mypn));
-  int *pn = INTEGER_POINTER(mypn);
-  printf(" Printed from C: %d strings\n", *pn);
-  char *Pmychar[*pn];  // array of n pointers 
-                       // to character strings
-
-  PROTECT(mychar = AS_CHARACTER(mychar)); 
-
-  int i;
-  for(i=0;i<*pn;i++){
-    Pmychar[i] = R_alloc(strlen(CHAR(STRING_ELT(mychar, i))), sizeof(char)); 
-    strcpy(Pmychar[i], CHAR(STRING_ELT(mychar, i))); 
-    printf(" %s\n",Pmychar[i]);
-  }
-
-  (*pn)++;
-
-  UNPROTECT(2);
-  return(R_NilValue); 
-}
-
 
 //.Call-compatible
 //load + get size of the query result

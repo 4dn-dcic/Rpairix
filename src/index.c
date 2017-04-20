@@ -14,10 +14,8 @@
 #define TAD_MIN_CHUNK_GAP 32768
 // 1<<14 is the size of minimum bin.
 #define TAD_LIDX_SHIFT    14
-#define REGION_SPLIT_CHARACTER   '|'
 #define DEFAULT_DELIMITER '\t'
 #define MAX_REGION_STR_LEN 10000
-
 
 typedef struct {
 	uint64_t u, v;
@@ -59,6 +57,7 @@ struct __ti_iter_t {
 
 
 
+ti_conf_t ti_conf_null = { 0, 0, 0, 0, 0, 0, 0, '\t', '#', 0 };
 ti_conf_t ti_conf_gff = { 0, 1, 4, 5, 0, 0, 0, '\t', '#', 0 };
 ti_conf_t ti_conf_bed = { TI_FLAG_UCSC, 1, 2,  3, 0, 0, 0, '\t', '#', 0 };
 ti_conf_t ti_conf_psltbl = { TI_FLAG_UCSC, 15, 17, 18, 0, 0, 0, '\t', '#', 0 };
