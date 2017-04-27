@@ -13,6 +13,9 @@ px_exists2(filename, chr1, chr2)
 
 \item{chr2}{second chromosome}
 }
+\value{
+TRUE if the key exists or FALSE if not. If index loading fails, NULL is returned.
+}
 \description{
 This function allows you to check if a pair of chromosomes exists in a 2D-indexed pairs file.
 }

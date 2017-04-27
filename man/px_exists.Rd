@@ -11,6 +11,9 @@ px_exists(filename, key)
 
 \item{key}{a pair of chromosomes in the query string format (e.g. "chr1|chr2"), or a chromosome for a 1D-indexed pairs file (e.g. "chr1").}
 }
+\value{
+TRUE if the key exists or FALSE if not. If index loading fails, NULL is returned.
+}
 \description{
 This function allows you to check if a key (chr for 1D, chr pair for 2D) exists in a pairs file.
 }
