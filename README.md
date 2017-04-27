@@ -284,7 +284,7 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 ## Version history
 ### 0.1.5
-* `px_query` : wild card (*) in a query now allowed (queries like 'chr11|*' or '*|chr2:1-20000' possible. '*' means whole genome.
+* `px_query` : wild card (\*) in a query now allowed (queries like 'chr11|\*' or '\*|chr2:1-20000' possible. '\*' means whole genome.
 * `px_exists` and `px_exists2` now returns TRUE/FALSE instead of 1/0.
 * Function `px_colnames` is added (identical to `px_get_column_names`)
 * Function `px_check_dim` is now renamed to `px_check_1d_vs_2d`.
