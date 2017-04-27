@@ -27,6 +27,15 @@
 #' res = px_query(filename, querystr, autoflip=TRUE)
 #' print(res)
 #'
+#' ## wild card query
+#' querystr = "chr21|*"
+#' res = px_query(filename, querystr, autoflip=TRUE)
+#' print(res)
+#'
+#' querystr = "*|chr21"
+#' res = px_query(filename, querystr, autoflip=TRUE)
+#' print(res)
+#'
 #' ## the following attempts will return NULL and give you a warning message.
 #' querystr = "chr20"
 #' res = px_query(filename, querystr, autoflip=TRUE)

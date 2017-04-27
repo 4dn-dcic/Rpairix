@@ -5,6 +5,7 @@
 #' @param filename a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.
 #' @param key a pair of chromosomes in the query string format (e.g. "chr1|chr2"), or a chromosome for a 1D-indexed pairs file (e.g. "chr1"). 
 #'
+#' @return TRUE if the key exists or FALSE if not. If index loading fails, NULL is returned.
 #' @keywords pairix check
 #' @export px_exists
 #' @examples
@@ -26,5 +27,6 @@
 #' @useDynLib Rpairix key_exists
 px_exists<-function(filename, key){
   out = .C("key_exists", filename, key, as.integer(0))
-  return(out[[3]][1])
+  if(out[[3]][1]==-1) { message("Can't open index file"); return(NULL); }
+  return(ifelse(out[[3]][1]==1,TRUE,FALSE))
 }

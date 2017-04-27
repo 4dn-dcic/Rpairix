@@ -51,12 +51,12 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```r
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.4.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.5.zip")
 ```
 
 
 ## Available R functions
-`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_dim`, `px_get_column_names` 
+`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_1d_vs_2d`, `px_colnames`
 
 ```r
 library(Rpairix)
@@ -75,8 +75,8 @@ px_startpos1_col(filename) # 1-based column index for mate1 start position
 px_startpos2_col(filename) # 1-based column index for mate2 start position
 px_endpos1_col(filename) # 1-based column index for mate1 end position
 px_endpos2_col(filename) # 1-based column index for mate2 end position
-px_check_dim(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
-px_get_column_names(filename) # returns a vector of column names, if available. (works only for pairs format)
+px_check_1d_vs_2d(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
+px_colnames(filename) # returns a vector of column names, if available. (works only for pairs format)
 ```
 
 ## Example run
@@ -153,11 +153,11 @@ data frame with 0 columns and 0 rows
 [1] 5
 > 
 > # checking if the file is 1D-indexed or 2D-indexed
-> px_check_dim("inst/test_4dn.pairs.gz")
+> px_check_1d_vs_2d("inst/test_4dn.pairs.gz")
 [1] 2
 >
 > # get column names
-> px_get_column_names("inst/test_4dn.pairs.gz")
+> px_colnames("inst/test_4dn.pairs.gz")
 [1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
 ```
 
@@ -254,14 +254,14 @@ px_endpos2_col(filename)
 
 ### Check 1D vs 2D
 ```
-px_check_dim(filename)
+px_check_1d_vs_2d(filename)
 ```
 * `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
 * The return value is an integer; 1 if the input file is 1D-indexed, 2 if 2D-indexed, -1 if an error occurred.
 
 ### Getting column names
 ```
-px_get_column_names(filename)
+px_colnames(filename)
 ```
 * `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist
 * The return value is a vector of column names.
@@ -283,6 +283,12 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.1.5
+* `px_query` : wild card (*) in a query now allowed (queries like 'chr11|*' or '*|chr2:1-20000' possible. '*' means whole genome.
+* `px_exists` and `px_exists2` now returns TRUE/FALSE instead of 1/0.
+* Function `px_colnames` is added (identical to `px_get_column_names`)
+* Function `px_check_dim` is now renamed to `px_check_1d_vs_2d`.
+
 ### 0.1.4
 * `px_exists2` is now added. It checks whether a chromosome pair exists by taking query chromosomes without the separator ('chr1','chr2') instead of ('chr1|chr2'). 
 

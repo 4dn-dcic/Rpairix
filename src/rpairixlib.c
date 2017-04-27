@@ -168,11 +168,12 @@ SEXP get_size(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery){
    if(tb){
      int i;
      for(i=0;i<*pnquery;i++){
-       ti_iter_t iter = ti_querys_2d(tb, pquerystr[i]);
-       while ((s = ti_read(tb, iter, &len)) != 0) {
+       sequential_iter_t *siter = ti_querys_2d_general(tb, pquerystr[i]);
+       while ((s = sequential_ti_read(siter, &len)) != 0) {
          if(len>max_len) max_len = len;
          n++;
        }
+       destroy_sequential_iter(siter);
      }
 
      ti_close(tb);
@@ -242,10 +243,10 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
      const ti_conf_t *pconf = ti_get_conf(tb->idx);
      int i, ires=0, k=0;  // i is index for querystr, ires is index for result line
      for(i=0;i<*pnquery;i++){
-       ti_iter_t iter = ti_querys_2d(tb, pquerystr[i]);
+       sequential_iter_t *siter = ti_querys_2d_general(tb, pquerystr[i]);
        char *s;
        int len=-1;
-       while ((s = ti_read(tb, iter, &len)) != 0) {
+       while ((s = sequential_ti_read(siter, &len)) != 0) {
          int j,start=0,m=0; // j is position on result line, start is start position of the current column, m is the index of the current column
          if(ncols==0) for(j=0;j<=len;j++) if(s[j]==pconf->delimiter||s[j]==0) ncols++;
          PROTECT(_r_presultstr_line[ires] = allocVector(STRSXP, ncols));
@@ -259,6 +260,7 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
          SET_VECTOR_ELT(_r_presultstr, k++, _r_presultstr_line[ires]); 
          ires++;
        }
+       destroy_sequential_iter(siter);
      }
      ti_close(tb);
    }

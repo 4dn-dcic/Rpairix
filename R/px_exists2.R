@@ -6,6 +6,7 @@
 #' @param chr1 first chromosome
 #' @param chr2 second chromosome
 #'
+#' @return TRUE if the key exists or FALSE if not. If index loading fails, NULL is returned.
 #' @keywords pairix check
 #' @export px_exists2
 #' @examples
@@ -32,5 +33,6 @@ px_exists2<-function(filename, chr1, chr2){
   separator= '|'
   key = paste(chr1, separator, chr2, sep="")
   out = .C("key_exists", filename, key, as.integer(0))
-  return(out[[3]][1])
+  if(out[[3]][1]==-1) { message("Can't open index file"); return(NULL); }
+  return(ifelse(out[[3]][1]==1,TRUE,FALSE))
 }
