@@ -75,8 +75,8 @@ px_query2 <- function(filename, queryobj, ...){
     stop("queryobj must be of class 'character', 'GInteractions', or 'GRangesList'.")
   }
   
-  cat("Querying pairix with string(s):","\n")
-  print(querystr)
+  cat("Querying pairix with string(s) (showing only first five):","\n")
+  print(head(querystr))
   return(px_query(filename=filename,querystr=querystr,...))
   
 }
