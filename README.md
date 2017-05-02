@@ -56,7 +56,7 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.5.zip")
 
 
 ## Available R functions
-`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_1d_vs_2d`, `px_colnames`
+`px_build_index`, `px_query`, `px_query_gr`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_1d_vs_2d`, `px_colnames`
 
 ```r
 library(Rpairix)
@@ -161,53 +161,13 @@ data frame with 0 columns and 0 rows
 > px_colnames("inst/test_4dn.pairs.gz")
 [1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
 >
-> ######### -- query using GenomicRanges-related objects -- #########
-> filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-> 
-> # -- construct query objects -- #
->
-> # 1. GenomicRanges::GRangesList
+> # query using GRangesList object
+> library(GenomicRanges)
 > gr <- GRanges(
 >   seqnames = Rle(c("chr10", "chr20", "chr21", "chr22"), c(1, 2, 1, 2)),
 >   ranges = IRanges((0:5*1000000)+1, end = (0:5*1000000)+13000000))
 > grl <- split(gr, rep(1:2,3))
-> grl
-GRangesList object of length 2:
-$1 
-GRanges object with 3 ranges and 0 metadata columns:
-      seqnames              ranges strand
-         <Rle>           <IRanges>  <Rle>
-  [1]    chr10 [      1, 13000000]      *
-  [2]    chr20 [2000001, 15000000]      *
-  [3]    chr22 [4000001, 17000000]      *
-
-$2 
-GRanges object with 3 ranges and 0 metadata columns:
-      seqnames              ranges strand
-  [1]    chr20 [1000001, 14000000]      *
-  [2]    chr21 [3000001, 16000000]      *
-  [3]    chr22 [5000001, 18000000]      *
-
--------
-seqinfo: 4 sequences from an unspecified genome; no seqlengths
-> 
-> # 2. InteractionSet::GInteractions
-> gi <- GInteractions(grl[[1]],grl[[2]])
-> gi
-GInteractions object with 3 interactions and 0 metadata columns:
-      seqnames1             ranges1     seqnames2             ranges2
-          <Rle>           <IRanges>         <Rle>           <IRanges>
-  [1]     chr10 [      1, 13000000] ---     chr20 [1000001, 14000000]
-  [2]     chr20 [2000001, 15000000] ---     chr21 [3000001, 16000000]
-  [3]     chr22 [4000001, 17000000] ---     chr22 [5000001, 18000000]
-  -------
-  regions: 6 ranges and 0 metadata columns
-  seqinfo: 4 sequences from an unspecified genome; no seqlengths
-> 
-> # -- query -- #
-> 
-> # with GInteractions
-> px_query_gr(filename,queryobj=gi)
+> px_query_gr("test_4dn.pairs.gz",queryobj=grl)
                readID  chr1     pos1  chr2     pos2 strand1 strand2
 1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
 2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
@@ -216,8 +176,10 @@ GInteractions object with 3 interactions and 0 metadata columns:
 5 SRR1658581.52271223 chr22 16645528 chr22 17454018       +       +
 6 SRR1658581.22023475 chr22 16927100 chr22 17255207       -       -
 > 
-> # with GRangesList
-> px_query_gr(filename,queryobj=grl)
+> # query using GInteractions object
+> library(InteractionSet)
+> gi <- GInteractions(grl[[1]],grl[[2]])
+> px_query_gr("test_4dn.pairs.gz",queryobj=gi)
                readID  chr1     pos1  chr2     pos2 strand1 strand2
 1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
 2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
@@ -265,7 +227,7 @@ px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.on
 px_query_gr(filename,queryobj,...)
 ```
 * `filename` is sometextfile.gz, and an index file sometextfile.gz.px2 must exist, as in `px_query`.
-* `queryobj` is one of three types: (1) a character vector as in `px_query()` above containing a set of pairs of genomic coordinates in 1-based "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2"); (2) A GInteractions object from the package "InteractionSet"; (3) A GRangesList composed of two GRanges objects of identical length (first pairs, second pairs).
+* `queryobj` is one of three types: (1) a character vector as in `px_query()` above containing a set of pairs of genomic coordinates in 1-based "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2"); (2) A GInteractions object from the package `InteractionSet`; (3) A `GRangesList` composed of two `GRanges` objects of identical length (first pairs, second pairs), from package `GenomicRanges`.
 * `...` are any of the other parameters from `px_query()`, such as `max_mem`, `stringsAsFactors`, `linecount.only`, `autoflip`.
 
 ### List of keys (chromosome pairs)
