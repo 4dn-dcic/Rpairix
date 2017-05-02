@@ -54,14 +54,12 @@ px_query_gr <- function(filename, queryobj, ...){
     querystr <- queryobj
   } else if (class(queryobj)=="GInteractions"){
     # -- produce querystr from GInteractions obj -- #
-    library(InteractionSet)
     # convert
     qdf <- as.data.frame(queryobj)
     qdf <- qdf[,c("seqnames1","start1","end1","seqnames2","start2","end2")]
     querystr <- df_to_querystr(qdf)
   } else if (class(queryobj)=="GRangesList"){
     # -- produce querystr from two identical-length, paired GRanges objects in a GRangesList-- #
-    library(GenomicRanges)
     # test lengths
     if(length(queryobj) != 2) stop("GRangesList must be composed of two GRanges objects.")
     if(diff(sapply(queryobj,length)) != 0) {
