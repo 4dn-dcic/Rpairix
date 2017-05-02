@@ -24,4 +24,3 @@ print(res)
 \keyword{2D}
 \keyword{pairix}
 \keyword{query}
-

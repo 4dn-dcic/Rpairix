@@ -41,4 +41,3 @@ print(res)
 }
 \keyword{check}
 \keyword{pairix}
-
