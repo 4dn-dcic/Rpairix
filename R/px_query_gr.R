@@ -4,7 +4,6 @@
 #'
 #' @param filename a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.
 #' @param queryobj One of three types: (1) a character vector containing a set of pairs of genomic coordinates in 1-based "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2"); (2) A GInteractions object from the package "InteractionSet"; (3) A GRangesList composed of two GRanges objects of identical length (first pairs, second pairs).
-#' @param printquery Whether to show a sample of the produced querystr.
 #' @param ... Any of the other parameters from px_query(), such as max_mem, stringsAsFactors, linecount.only, autoflip.
 #'
 #' @return data frame containing the query result. Column names are added if indexing was done with a pairs preset.
@@ -41,7 +40,7 @@
 #'
 
 
-px_query_gr <- function(filename, queryobj, printquery=FALSE, ...){
+px_query_gr <- function(filename, queryobj, ...){
   
   # -- helper function -- #
   df_to_querystr <- function(qdf){
@@ -76,11 +75,6 @@ px_query_gr <- function(filename, queryobj, printquery=FALSE, ...){
     querystr <- df_to_querystr(grldf)
   } else {
     stop("queryobj must be of class 'character', 'GInteractions', or 'GRangesList'.")
-  }
-  
-  if(printquery==TRUE){
-    cat("Querying pairix with string(s) (showing only first five):","\n")
-    print(head(querystr))
   }
   
   return(px_query(filename=filename,querystr=querystr,...))
