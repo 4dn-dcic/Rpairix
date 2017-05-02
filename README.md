@@ -63,6 +63,7 @@ library(Rpairix)
 px_build_index(filename,preset) # indexing
 px_query(filename,querystr) # querying
 px_query(filename,querystr,linecount.only=TRUE) # number of output lines for the query
+px_query_gr(filename,queryobj) # query using GRangesList or GInteractions object
 px_keylist(filename) # list of keys (chromosome pairs)
 px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
@@ -159,6 +160,71 @@ data frame with 0 columns and 0 rows
 > # get column names
 > px_colnames("inst/test_4dn.pairs.gz")
 [1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
+>
+> ######### -- query using GenomicRanges-related objects -- #########
+> filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+> 
+> # -- construct query objects -- #
+>
+> # 1. GenomicRanges::GRangesList
+> gr <- GRanges(
+>   seqnames = Rle(c("chr10", "chr20", "chr21", "chr22"), c(1, 2, 1, 2)),
+>   ranges = IRanges((0:5*1000000)+1, end = (0:5*1000000)+13000000))
+> grl <- split(gr, rep(1:2,3))
+> grl
+GRangesList object of length 2:
+$1 
+GRanges object with 3 ranges and 0 metadata columns:
+      seqnames              ranges strand
+         <Rle>           <IRanges>  <Rle>
+  [1]    chr10 [      1, 13000000]      *
+  [2]    chr20 [2000001, 15000000]      *
+  [3]    chr22 [4000001, 17000000]      *
+
+$2 
+GRanges object with 3 ranges and 0 metadata columns:
+      seqnames              ranges strand
+  [1]    chr20 [1000001, 14000000]      *
+  [2]    chr21 [3000001, 16000000]      *
+  [3]    chr22 [5000001, 18000000]      *
+
+-------
+seqinfo: 4 sequences from an unspecified genome; no seqlengths
+> 
+> # 2. InteractionSet::GInteractions
+> gi <- GInteractions(grl[[1]],grl[[2]])
+> gi
+GInteractions object with 3 interactions and 0 metadata columns:
+      seqnames1             ranges1     seqnames2             ranges2
+          <Rle>           <IRanges>         <Rle>           <IRanges>
+  [1]     chr10 [      1, 13000000] ---     chr20 [1000001, 14000000]
+  [2]     chr20 [2000001, 15000000] ---     chr21 [3000001, 16000000]
+  [3]     chr22 [4000001, 17000000] ---     chr22 [5000001, 18000000]
+  -------
+  regions: 6 ranges and 0 metadata columns
+  seqinfo: 4 sequences from an unspecified genome; no seqlengths
+> 
+> # -- query -- #
+> 
+> # with GInteractions
+> px_query_gr(filename,queryobj=gi)
+               readID  chr1     pos1  chr2     pos2 strand1 strand2
+1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
+2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
+3 SRR1658581.39908038 chr22 16224023 chr22 16224245       +       -
+4 SRR1658581.18052095 chr22 16389136 chr22 16687983       -       -
+5 SRR1658581.52271223 chr22 16645528 chr22 17454018       +       +
+6 SRR1658581.22023475 chr22 16927100 chr22 17255207       -       -
+> 
+> # with GRangesList
+> px_query_gr(filename,queryobj=grl)
+               readID  chr1     pos1  chr2     pos2 strand1 strand2
+1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
+2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
+3 SRR1658581.39908038 chr22 16224023 chr22 16224245       +       -
+4 SRR1658581.18052095 chr22 16389136 chr22 16687983       -       -
+5 SRR1658581.52271223 chr22 16645528 chr22 17454018       +       +
+6 SRR1658581.22023475 chr22 16927100 chr22 17255207       -       -
 ```
 
 ***
@@ -188,12 +254,19 @@ sc2 second sequence (chromosome) column index (1-based). Zero (0) means not spec
 ```
 px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE, autoflip=FALSE)
 ```
-* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
+* `filename` is sometextfile.gz, and an index file sometextfile.gz.px2 must exist.
 * `querystr` (query string) is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000'). It can be a vector of query strings.
 * `max_mem` is the maximum total length of the result strings (sum of string lengths).
 * The return value is a data frame, each row corresponding to the line in the input file within the query range.
 * If `linecount.only` is TRUE, the function returns only the number of output lines for the query. 
 * If `autoflip` is TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If `linecount.only` option is used in combination with `autoflip`, the result count is on the flipped query in case the query gets flipped.
+
+```
+px_query_gr(filename,queryobj,...)
+```
+* `filename` is sometextfile.gz, and an index file sometextfile.gz.px2 must exist, as in `px_query`.
+* `queryobj` is one of three types: (1) a character vector as in `px_query()` above containing a set of pairs of genomic coordinates in 1-based "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2"); (2) A GInteractions object from the package "InteractionSet"; (3) A GRangesList composed of two GRanges objects of identical length (first pairs, second pairs).
+* `...` are any of the other parameters from `px_query()`, such as `max_mem`, `stringsAsFactors`, `linecount.only`, `autoflip`.
 
 ### List of keys (chromosome pairs)
 ```
