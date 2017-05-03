@@ -371,6 +371,8 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 * initial release
 
 
+***
+
 ## Acknowledgment
-* Thanks scottkall for GRanges/GInteractions integration.
+* Thanks [scottkall](https://github.com/scottkall) for GRanges/GInteractions integration.
 
