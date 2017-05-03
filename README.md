@@ -311,7 +311,7 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 ## Version history
 ### 0.1.6
-* `px_query` : input query can be a GInteractions object or a list of GRanges objects.
+* `px_query` : input query can be a GInteractions object or a list of GRanges objects. Argument 'querystr' is now 'query'.
 
 ### 0.1.5
 * `px_query` : wild card (\*) in a query now allowed (queries like 'chr11|\*' or '\*|chr2:1-20000' possible. '\*' means whole genome.
