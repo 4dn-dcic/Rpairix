@@ -4,3 +4,5 @@ r:
   - release
   - devel
   - oldrel
+bioc_packages: GenomicRanges
+bioc_packages: InteractionSet

@@ -19,4 +19,3 @@ print(cols)
 }
 \keyword{names}
 \keyword{pairix}
-

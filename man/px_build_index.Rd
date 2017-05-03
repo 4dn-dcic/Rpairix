@@ -45,4 +45,3 @@ px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
 }
 \keyword{index}
 \keyword{pairix}
-
