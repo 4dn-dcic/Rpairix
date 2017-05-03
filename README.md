@@ -120,7 +120,7 @@ data frame with 0 columns and 0 rows
 >   seqnames = Rle(c("chr10", "chr20", "chr21", "chr22"), c(1, 2, 1, 2)),
 >   ranges = IRanges((0:5*1000000)+1, end = (0:5*1000000)+13000000))
 > grl <- split(gr, rep(1:2,3))
-> px_query("test_4dn.pairs.gz",queryobj=grl)
+> px_query("test_4dn.pairs.gz",query=grl)
                readID  chr1     pos1  chr2     pos2 strand1 strand2
 1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
 2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
@@ -132,7 +132,7 @@ data frame with 0 columns and 0 rows
 > # query using GInteractions object
 > library(InteractionSet)
 > gi <- GInteractions(grl[[1]],grl[[2]])
-> px_query("test_4dn.pairs.gz",queryobj=gi)
+> px_query("test_4dn.pairs.gz",query=gi)
                readID  chr1     pos1  chr2     pos2 strand1 strand2
 1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
 2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
