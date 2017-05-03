@@ -33,6 +33,7 @@
 * [Usage](#usage)
 * [For developers](#for-developers)
 * [Version history](#version-history)
+* [Acknowledgment](#acknowledgment)
 
 
 ## Installation
@@ -310,7 +311,7 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
-### 0.1.6 (Scottkall)
+### 0.1.6
 * `px_query` : input query can be a GInteractions object or a list of GRanges objects. Argument 'querystr' is now 'query'.
 
 ### 0.1.5
@@ -368,4 +369,8 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 
 ### 0.0.1
 * initial release
+
+
+## Acknowledgment
+* Thanks scottkall for GRanges/GInteractions integration.
 
