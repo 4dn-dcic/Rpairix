@@ -17,14 +17,16 @@
 #' 
 #' # -- construct query objects -- #
 #' 
-#' # GenomicRanges::GRangesList
+#' # GRangesList
+#' library(GenomicRanges)
 #' gr <- GRanges(
 #'   seqnames = Rle(c("chr10", "chr20", "chr21", "chr22"), c(1, 2, 1, 2)),
 #'   ranges = IRanges((0:5*1000000)+1, end = (0:5*1000000)+13000000))
 #' grl <- split(gr, rep(1:2,3))
 #' grl
 #' 
-#' # InteractionSet::GInteractions
+#' # GInteractions
+#' library(InteractionSet)
 #' gi <- GInteractions(grl[[1]],grl[[2]])
 #' gi
 #' 
