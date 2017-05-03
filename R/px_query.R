@@ -1,74 +1,140 @@
-#' Query function on pairix-indexed pairs file.
+#' Query pairix-indexed pairs file.
 #'
-#' This function allows you to query a 2D range in a pairix-indexed pairs file.
+#' This function allows you to query a 2D range in a pairix-indexed pairs file using strings or GenomicRanges-related objects.
 #'
 #' @param filename a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.
-#' @param querystr a character vector containing a list of pairs of genomic coordinates in "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2")
+#' @param query One of three types: (1) a character vector containing a set of pairs of genomic coordinates in 1-based "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2"); (2) A GInteractions object from the package "InteractionSet"; (3) A GRangesList composed of two GRanges objects of identical length (first pairs, second pairs), from the package "GenomicRanges".
 #' @param max_mem the total string length allowed for the result. If the size of the output exceeds this number, the function will return NULL and print out a memory error. Default 100,000,000.
 #' @param stringsAsFactors the stringsAsFactors parameter for the data frame returned. Default False.
 #' @param linecount.only If TRUE, the function returns an integer corresponding to the number of output lines instead of the actual query result. (default FALSE) 
 #' @param autoflip If TRUE, the function will rerun on a flipped query (mate1 and mate2 swapped) if the original query results in an empty output. (default FALSE). If linecount.only option is used in combination with autoflip, the result count is on the flipped query in case the query gets flipped.
 #'
 #' @return data frame containing the query result. Column names are added if indexing was done with a pairs preset.
-#' @keywords pairix query 2D
+#' @keywords pairix query 2D GenomicRanges GInteractions
+#' @import InteractionSet GenomicRanges
+#' @details This function is compatible with Bioconductor packages InteractionSet and GenomicRanges.
 #' @export px_query
 #' @examples
 #' 
+#' ##### -- query using strings -- ######
+#' 
 #' ## 2D-indexed file
 #' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
-#' querystr = c("chr10|chr20","chr22|chr22")
-#' res = px_query(filename, querystr)
+#' query = c("chr10|chr20","chr22|chr22")
+#' res = px_query(filename, query)
 #' print(res)
 #'
-#' n = px_query(filename, querystr, linecount.only=TRUE)
+#' n = px_query(filename, query, linecount.only=TRUE)
 #' print(n) 
 #'
-#' querystr = "chr20|chr10"
-#' res = px_query(filename, querystr, autoflip=TRUE)
+#' query = "chr20|chr10"
+#' res = px_query(filename, query, autoflip=TRUE)
 #' print(res)
 #'
 #' ## wild card query
-#' querystr = "chr21|*"
-#' res = px_query(filename, querystr, autoflip=TRUE)
+#' query = "chr21|*"
+#' res = px_query(filename, query, autoflip=TRUE)
 #' print(res)
 #'
-#' querystr = "*|chr21"
-#' res = px_query(filename, querystr, autoflip=TRUE)
+#' query = "*|chr21"
+#' res = px_query(filename, query, autoflip=TRUE)
 #' print(res)
 #'
 #' ## the following attempts will return NULL and give you a warning message.
-#' querystr = "chr20"
-#' res = px_query(filename, querystr, autoflip=TRUE)
+#' query = "chr20"
+#' res = px_query(filename, query, autoflip=TRUE)
 #' print(res)
 #'
 #' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz", package="Rpairix")
-#' querystr = "10:1-1000000|20"
-#' res = px_query(filename, querystr)
+#' query = "10:1-1000000|20"
+#' res = px_query(filename, query)
 #' print(res)
 #'
 #' ## the following attempts will return NULL and give you a warning message.
-#' res = px_query(filename, querystr, autoflip=TRUE)
+#' res = px_query(filename, query, autoflip=TRUE)
 #' print(res)
 #'
 #' filename = system.file(".","merged_nodups.space.chrblock_sorted.subsample1.txt.gz",
 #' package="Rpairix")
-#' querystr = "10:1-1000000|20"
-#' res = px_query(filename, querystr)
+#' query = "10:1-1000000|20"
+#' res = px_query(filename, query)
 #' print(res)
 #'
 #' ## 1D-indexed file
 #' filename = system.file(".","SRR1171591.variants.snp.vqsr.p.vcf.gz", package="Rpairix")
-#' querystr = 'chr10|5000000-20000000'
-#' res = px_query(filename, querystr)
+#' query = 'chr10|5000000-20000000'
+#' res = px_query(filename, query)
 #' print(res)
 #' 
 #' ## the following attempts will return NULL and give you a warning message.
-#' querystr = 'chr10|chr20'
-#' res = px_query(filename, querystr)
+#' query = 'chr10|chr20'
+#' res = px_query(filename, query)
+#' print(res)
+#' 
+#' 
+#' ##### -- query using GenomicRanges-related objects -- #####
+#' 
+#' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+#' 
+#' # create GRangesList
+#' library(GenomicRanges)
+#' gr <- GRanges(
+#'   seqnames = Rle(c("chr10", "chr20", "chr21", "chr22"), c(1, 2, 1, 2)),
+#'   ranges = IRanges((0:5*1000000)+1, end = (0:5*1000000)+13000000))
+#' grl <- split(gr, rep(1:2,3))
+#' grl
+#' 
+#' # create GInteractions
+#' library(InteractionSet)
+#' gi <- GInteractions(grl[[1]],grl[[2]])
+#' gi
+#' 
+#' # query with GInteractions
+#' res = px_query(filename,query=gi)
+#' print(res)
+#' 
+#' # query with GRangesList
+#' res = px_query(filename,query=grl)
 #' print(res)
 #'
 #' @useDynLib Rpairix get_size get_lines check_1d_vs_2d
-px_query<-function(filename, querystr, max_mem=100000000, stringsAsFactors=FALSE, linecount.only=FALSE, autoflip=FALSE){
+px_query<-function(filename, query, max_mem=100000000, stringsAsFactors=FALSE, linecount.only=FALSE, autoflip=FALSE){
+
+  # -- helper function -- #
+  df_to_querystr <- function(qdf){
+    # expects presorted df (columns ordered: seqnames1,start1,end1,seqnames2,start2,end2)
+    querystr <- paste0(qdf[,1],":",qdf[,2],"-",qdf[,3],"|",qdf[,4],":",qdf[,5],"-",qdf[,6])
+    return(querystr)
+  }
+  
+  # -- produce querystr -- #
+  if(class(query)=="character"){
+    querystr <- query
+  } else if (class(query)=="GInteractions"){
+    # -- produce querystr from GInteractions obj -- #
+    # convert
+    qdf <- as.data.frame(query)
+    qdf <- qdf[,c("seqnames1","start1","end1","seqnames2","start2","end2")]
+    querystr <- df_to_querystr(qdf)
+    rm(qdf)
+  } else if (class(query)=="GRangesList"){
+    # -- produce querystr from two identical-length, paired GRanges objects in a GRangesList-- #
+    # test lengths
+    if(length(query) != 2) stop("GRangesList must be composed of two GRanges objects.")
+    if(diff(sapply(query,length)) != 0) {
+      stop("Paired GRanges objects in the GRangesList must be of identical length.")
+    }
+    # convert
+    grldf <- lapply(query,as.data.frame)
+    names(grldf[[2]]) <- sub("$","2",names(grldf[[2]]))
+    grldf <- cbind(grldf[[1]],grldf[[2]])
+    grldf <- grldf[,c("seqnames","start","end","seqnames2","start2","end2")]
+    querystr <- df_to_querystr(grldf)
+    rm(grldf)
+  } else {
+    stop("query must be of class 'character', 'GInteractions', or 'GRangesList'.")
+  }
+  rm(query)
 
   # sanity check for 2D query on 1D index.
   ind_dim = .C("check_1d_vs_2d", filename, as.integer(0))

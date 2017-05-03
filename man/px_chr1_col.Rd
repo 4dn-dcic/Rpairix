@@ -31,4 +31,3 @@ print(res)
 }
 \keyword{column}
 \keyword{pairix}
-

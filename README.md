@@ -61,8 +61,8 @@ install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.5.zip")
 ```r
 library(Rpairix)
 px_build_index(filename,preset) # indexing
-px_query(filename,querystr) # querying
-px_query(filename,querystr,linecount.only=TRUE) # number of output lines for the query
+px_query(filename,query) # querying using a string or GenomicRanges-related objects.
+px_query(filename,query,linecount.only=TRUE) # number of output lines for the query
 px_keylist(filename) # list of keys (chromosome pairs)
 px_seqlist(filename) # list of chromosomes
 px_seq1list(filename) # list of first chromosomes
@@ -113,6 +113,33 @@ data frame with 0 columns and 0 rows
 > multi_querystr = c("chr10|chr20","chr2|chr20")
 > px_query("inst/test_4dn.pairs.gz", multi_querystr, linecount.only=TRUE)
 [1] 104
+>
+> # query using GRangesList object
+> library(GenomicRanges)
+> gr <- GRanges(
+>   seqnames = Rle(c("chr10", "chr20", "chr21", "chr22"), c(1, 2, 1, 2)),
+>   ranges = IRanges((0:5*1000000)+1, end = (0:5*1000000)+13000000))
+> grl <- split(gr, rep(1:2,3))
+> px_query("test_4dn.pairs.gz",query=grl)
+               readID  chr1     pos1  chr2     pos2 strand1 strand2
+1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
+2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
+3 SRR1658581.39908038 chr22 16224023 chr22 16224245       +       -
+4 SRR1658581.18052095 chr22 16389136 chr22 16687983       -       -
+5 SRR1658581.52271223 chr22 16645528 chr22 17454018       +       +
+6 SRR1658581.22023475 chr22 16927100 chr22 17255207       -       -
+> 
+> # query using GInteractions object
+> library(InteractionSet)
+> gi <- GInteractions(grl[[1]],grl[[2]])
+> px_query("test_4dn.pairs.gz",query=gi)
+               readID  chr1     pos1  chr2     pos2 strand1 strand2
+1 SRR1658581.33457260 chr10  2559777 chr20  7888262       -       +
+2 SRR1658581.15714901 chr10  4579507 chr20 10941340       +       +
+3 SRR1658581.39908038 chr22 16224023 chr22 16224245       +       -
+4 SRR1658581.18052095 chr22 16389136 chr22 16687983       -       -
+5 SRR1658581.52271223 chr22 16645528 chr22 17454018       +       +
+6 SRR1658581.22023475 chr22 16927100 chr22 17255207       -       -
 >
 > # getting list of chromosome pairs and chromosomes
 > keys = px_keylist(filename)
@@ -186,10 +213,10 @@ sc2 second sequence (chromosome) column index (1-based). Zero (0) means not spec
 
 ### Querying
 ```
-px_query(filename,querystr,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE, autoflip=FALSE)
+px_query(filename,query,max_mem=100000000,stringsAsFactors=FALSE,linecount.only=FALSE, autoflip=FALSE)
 ```
-* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist.
-* `querystr` (query string) is in the same format as the format for pairix. (e.g. '1:1-10000000|20:50000000-60000000'). It can be a vector of query strings.
+* `filename` is sometextfile.gz, and an index file sometextfile.gz.px2 must exist.
+* `query` is one of three types: (1) a character vector containing a set of pairs of genomic coordinates in 1-based "chr1:start1-end1|chr2:start2-end2" format. start-end can be omitted (e.g. "chr1:start1-end1|chr2" or "chr1|chr2"); (2) A GInteractions object from the package "InteractionSet"; (3) A GRangesList composed of two GRanges objects of identical length (first pairs, second pairs), from the package "GenomicRanges".
 * `max_mem` is the maximum total length of the result strings (sum of string lengths).
 * The return value is a data frame, each row corresponding to the line in the input file within the query range.
 * If `linecount.only` is TRUE, the function returns only the number of output lines for the query. 
