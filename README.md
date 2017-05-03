@@ -310,7 +310,7 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
-### 0.1.6
+### 0.1.6 (Scottkall)
 * `px_query` : input query can be a GInteractions object or a list of GRanges objects. Argument 'querystr' is now 'query'.
 
 ### 0.1.5
