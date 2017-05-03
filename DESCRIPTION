@@ -6,7 +6,7 @@ Description: R binder for pairix, tool for querying a pair of genomic ranges in 
 Depends:
     R (>= 3.1)
 Imports:
-    GenomicRanges
+    GenomicRanges,
     InteractionSet
 License: MIT
 Encoding: UTF-8
