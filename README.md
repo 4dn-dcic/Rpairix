@@ -1,4 +1,9 @@
 # Rpairix
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c719ab5066654aac999beb5d6e80cc56)](https://www.codacy.com/app/SooLee/Rpairix?utm_source=github.com&utm_medium=referral&utm_content=4dn-dcic/Rpairix&utm_campaign=badger)
+
+* An R package for querying on pairs file (pairix-indexed bgzipped text file containig a pair of genomic coordinates).
+* This is an R binder for Pairix, a stand-alone C program (https://github.com/4dn-dcic/pairix).
 * Rpairix is an R package for indexing and querying on a block-compressed text file containing a pair of genomic coordinates.
 * It is an R binder for Pairix (https://github.com/4dn-dcic/pairix), a stand-alone C program that was written on top of tabix (https://github.com/samtools/tabix) as a tool for the 4DN-standard _pairs_ file format describing Hi-C data: https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md
 * However, Pairix/Rpairix can be used as a generic tool for indexing and querying any [bgzipped](https://github.com/samtools/tabix) text file containing genomic coordinates, for either 2D- or 1D- indexing and querying.
@@ -34,7 +39,6 @@
 * [For developers](#for-developers)
 * [Version history](#version-history)
 * [Acknowledgment](#acknowledgment)
-
 
 ## Installation
 ```r
