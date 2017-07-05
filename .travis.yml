@@ -1,6 +1,8 @@
-language: r
+language: R
 cache: packages
 r:
   - release
   - devel
   - oldrel
+bioc_packages: GenomicRanges
+bioc_packages: InteractionSet
