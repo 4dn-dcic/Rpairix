@@ -23,10 +23,12 @@
    SOFTWARE.
 */
 
-/* Contact: Heng Li <lh3@live.co.uk> */
+/* Contact: Soo Lee <duplexa@gmail.com> */
 
 #ifndef __TABIDX_H
 #define __TABIDX_H
+
+#define PACKAGE_VERSION "0.2.3"
 
 #include <stdint.h>
 #include "kstring.h"
@@ -143,6 +145,10 @@ extern "C" {
 	 * pointer should be freed by a single free() call by the routine
 	 * calling this function. The number of sequences is returned at *n. */
 	const char **ti_seqname(const ti_index_t *idx, int *n);
+
+        /* get linecount */
+        int get_linecount(const ti_index_t *idx);
+
 
 	/******************
 	 * Low-level APIs *

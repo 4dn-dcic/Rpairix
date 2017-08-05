@@ -56,12 +56,12 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```r
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.1.7.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.2.3.zip")
 ```
 
 
 ## Available R functions
-`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_1d_vs_2d`, `px_colnames`
+`px_build_index`, `px_query`, `px_keylist`, `px_seqlist`, `px_seq1list`, `px_seq2list`, `px_exists`, `px_exists2`, `px_chr1_col`, `px_chr2_col`, `px_startpos1_col`, `px_startpos2_col`, `px_endpos1_col`, `px_endpos2_col`, `px_check_1d_vs_2d`, `px_colnames`, `px_get_linecount`
 
 ```r
 library(Rpairix)
@@ -82,6 +82,7 @@ px_endpos1_col(filename) # 1-based column index for mate1 end position
 px_endpos2_col(filename) # 1-based column index for mate2 end position
 px_check_1d_vs_2d(filename) # returns 1 if the file is 1D-indexed, 2 if 2D-indexed. -1 if error.
 px_colnames(filename) # returns a vector of column names, if available. (works only for pairs format)
+px_get_linecount(filename) # returns the total line count of the file (equivalent to gunzip -c | wc -l but much faster)
 ```
 
 ## Example run
@@ -191,6 +192,10 @@ data frame with 0 columns and 0 rows
 > # get column names
 > px_colnames("inst/test_4dn.pairs.gz")
 [1] "readID"  "chr1"    "pos1"    "chr2"    "pos2"    "strand1" "strand2"
+>
+> # get total line count of the file
+> px_get_linecount("inst/test_4dn.pairs.gz")
+[1] 60648
 ```
 
 ***
@@ -299,9 +304,15 @@ px_colnames(filename)
 * The return value is a vector of column names.
 * Returns values only if the indexing must have been done with 'pairs' preset (either explicitly by setting a preset or by file extension recognition) and if the column heading information is available.
 
+
+### Getting the total line count
+```
+px_get_linecount(filename)
+```
+* `filename` is sometextfile.gz and an index file sometextfile.gz.px2 must exist
+* The return value is an integer corresponding to the total line count of the file (equivalent to `gunzip -c | wc -l` but much faster)
+
 ***
-
-
 
 ## For developers
 When you modify the repo, rebuild the R package before your commit/push:
@@ -315,6 +326,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.2.3
+* `px_get_linecount` is available now. This function gives you the total line count of a file instantly. To use this feature, the pairs file must be re-indexed with Pairix/Pypairix/Rpairix 0.2.3 or higher.
+
 ### 0.1.6
 * The index is now consistent with the new index adopted by pairix/pypairix 0.1.7. Re-index for older files.
 
