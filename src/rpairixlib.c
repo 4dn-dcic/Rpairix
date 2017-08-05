@@ -124,6 +124,14 @@ void check_1d_vs_2d(char** pfn, int* pflag){
 }
 
 
+void Get_linecount(char** pfn, int* pflag){
+  pairix_t *tb = load(*pfn);
+  if(tb){
+    *pflag = get_linecount(tb->idx);
+  }
+  else *pflag= -1;
+}
+
 
 //.Call-compatible
 //load + get size of the query result
