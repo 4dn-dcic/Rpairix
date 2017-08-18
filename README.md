@@ -56,7 +56,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```r
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.2.3.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.2.4.zip")
 ```
 
 
@@ -326,6 +326,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.2.4
+* Index is compatible with pairix/pypairix 0.2.4. (Magic number updated)
+
 ### 0.2.3
 * `px_get_linecount` is available now. This function gives you the total line count of a file instantly. To use this feature, the pairs file must be re-indexed with Pairix/Pypairix/Rpairix 0.2.3 or higher.
 
