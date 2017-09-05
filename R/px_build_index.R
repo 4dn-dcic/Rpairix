@@ -41,11 +41,11 @@ px_build_index<-function(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec
   ec2=as.integer(ec2)
   line_skip=as.integer(line_skip)
   out = .C("build_index", filename, preset, sc, bc, ec, sc2, bc2, ec2, delimiter, comment_char, region_split_character, line_skip, force, as.integer(0))
-  if(out[[13]][1] == -1) { message("Can't create index."); return(-1); }
-  if(out[[13]][1] == -2) { message("Can't recognize preset."); return(-1); }
-  if(out[[13]][1] == -3) { message("Was bgzip used to compress this file?"); return(-1); }
-  if(out[[13]][1] == -4) { message("The index file exists. Please use force=TRUE to overwrite"); return(-1); }
-  if(out[[13]][1] == -5) { message("Can't recognize file type, with no preset specified."); return(-1); }
+  if(out[[14]][1] == -1) { message("Can't create index."); return(-1); }
+  if(out[[14]][1] == -2) { message("Can't recognize preset."); return(-1); }
+  if(out[[14]][1] == -3) { message("Was bgzip used to compress this file?"); return(-1); }
+  if(out[[14]][1] == -4) { message("The index file exists. Please use force=TRUE to overwrite"); return(-1); }
+  if(out[[14]][1] == -5) { message("Can't recognize file type, with no preset specified."); return(-1); }
   return(0);
 }
 
