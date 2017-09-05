@@ -58,6 +58,7 @@ void key_exists(char** pfn, char** pkey, int* pflag){
   pairix_t *tb = load(*pfn);
   if(tb){
     *pflag = ti_get_tid(tb->idx, *pkey)!=-1?1:0;
+    ti_close(tb);
   }
   else *pflag= -1;
 }
