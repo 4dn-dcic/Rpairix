@@ -6,7 +6,7 @@
 \usage{
 px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0, sc2 = 0,
   bc2 = 0, ec2 = 0, delimiter = "\\t", comment_char = "#",
-  line_skip = 0, force = FALSE)
+  region_split_character = "|", line_skip = 0, force = FALSE)
 }
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
@@ -28,6 +28,8 @@ px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0, sc2 = 0,
 \item{delimiter}{delimiter (e.g. '\\t' or ' ') (default '\\t'). If preset is given, preset overrides delimiter.}
 
 \item{comment_char}{comment character. Lines beginning with this character are skipped when creating an index. If preset is given, preset overrides comment_char (default '#')}
+
+\item{region_split_character}{region_split_character (default '|'). This option overrides preset. (All presets have default region_split_character ('|')). This parameter can be useful when one's chromosome names contain character '|'.}
 
 \item{line_skip}{number of lines to skip in the beginning. (default 0)}
 

@@ -12,6 +12,7 @@
 #' @param ec2 second end position column index (1-based). Zero (0) means not specified. If preset is given, preset overrides ec2. (default 0)
 #' @param delimiter delimiter (e.g. '\\t' or ' ') (default '\\t'). If preset is given, preset overrides delimiter.
 #' @param comment_char comment character. Lines beginning with this character are skipped when creating an index. If preset is given, preset overrides comment_char (default '#')
+#' @param region_split_character region_split_character (default '|'). This option overrides preset. (All presets have default region_split_character ('|')). This parameter can be useful when one's chromosome names contain character '|'.
 #' @param line_skip number of lines to skip in the beginning. (default 0) 
 #' @param force If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)
 #'
@@ -20,11 +21,15 @@
 #' @examples
 #'
 #' filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+#' px_build_index(filename, force=TRUE)
+#' px_query(filename, 'chr22|chr22')
 #' px_build_index(filename, 'pairs', force=TRUE)
 #' px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
+#' px_build_index(filename, region_split_character='^', force=TRUE)
+#' px_query(filename, 'chr22^chr22')
 #'
 #' @useDynLib Rpairix build_index
-px_build_index<-function(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec2=0, delimiter='\t', comment_char='#', line_skip=0, force=FALSE){
+px_build_index<-function(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec2=0, delimiter='\t', comment_char='#', region_split_character='|', line_skip=0, force=FALSE){
 
   if(!file.exists(filename)) { message("Cannot find input file."); return(-1); }
 
@@ -35,7 +40,7 @@ px_build_index<-function(filename, preset='', sc=0, bc=0, ec=0, sc2=0, bc2=0, ec
   bc2=as.integer(bc2)
   ec2=as.integer(ec2)
   line_skip=as.integer(line_skip)
-  out = .C("build_index", filename, preset, sc, bc, ec, sc2, bc2, ec2, delimiter, comment_char, line_skip, force, as.integer(0))
+  out = .C("build_index", filename, preset, sc, bc, ec, sc2, bc2, ec2, delimiter, comment_char, region_split_character, line_skip, force, as.integer(0))
   if(out[[13]][1] == -1) { message("Can't create index."); return(-1); }
   if(out[[13]][1] == -2) { message("Can't recognize preset."); return(-1); }
   if(out[[13]][1] == -3) { message("Was bgzip used to compress this file?"); return(-1); }

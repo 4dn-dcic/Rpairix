@@ -294,7 +294,7 @@ SEXP get_lines(SEXP _r_pfn, SEXP _r_pquerystr, SEXP _r_pnquery, SEXP _r_pn){
 
 
 
-void build_index(char **pinputfilename, char **ppreset, int *psc, int *pbc, int *pec, int *psc2, int *pbc2, int *pec2, char **pdelimiter, char **pmeta_char, int *pline_skip, int *pforce, int *pflag){
+void build_index(char **pinputfilename, char **ppreset, int *psc, int *pbc, int *pec, int *psc2, int *pbc2, int *pec2, char **pdelimiter, char **pmeta_char, char **pregion_split_character, int *pline_skip, int *pforce, int *pflag){
 
   if(*pforce==0){
     char *fnidx = calloc(strlen(*pinputfilename) + 5, 1);
@@ -331,6 +331,7 @@ void build_index(char **pinputfilename, char **ppreset, int *psc, int *pbc, int 
         conf.bc2 = *pbc2;
         conf.ec2 = *pec2;
         conf.delimiter = (*pdelimiter)[0];
+        conf.region_split_character = (*pregion_split_character)[0];
         conf.meta_char = (int)((*pmeta_char)[0]);
         conf.line_skip = *pline_skip;
       }
@@ -343,6 +344,9 @@ void build_index(char **pinputfilename, char **ppreset, int *psc, int *pbc, int 
       else if (strcmp(*ppreset, "merged_nodups") == 0) conf = ti_conf_merged_nodups;
       else if (strcmp(*ppreset, "old_merged_nodups") == 0) conf = ti_conf_old_merged_nodups;
       else *pflag = -2;  // wrong preset
+
+      // region_split_character overrides preset
+      if ((*pregion_split_character)[0] != conf.region_split_character) conf.region_split_character = (*pregion_split_character)[0];
 
       if (*pflag != -2 && *pflag != -5 ) *pflag= ti_index_build(*pinputfilename, &conf);  // -1 if failed
     }
