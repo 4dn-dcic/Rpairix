@@ -6,7 +6,7 @@
 \usage{
 px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0, sc2 = 0,
   bc2 = 0, ec2 = 0, delimiter = "\\t", comment_char = "#",
-  line_skip = 0, force = FALSE)
+  region_split_character = "|", line_skip = 0, force = FALSE)
 }
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
@@ -29,6 +29,8 @@ px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0, sc2 = 0,
 
 \item{comment_char}{comment character. Lines beginning with this character are skipped when creating an index. If preset is given, preset overrides comment_char (default '#')}
 
+\item{region_split_character}{region_split_character (default '|'). This option overrides preset. (All presets have default region_split_character ('|')). This parameter can be useful when one's chromosome names contain character '|'.}
+
 \item{line_skip}{number of lines to skip in the beginning. (default 0)}
 
 \item{force}{If TRUE, overwrite existing index file. If FALSE, do not overwrite unless the index file is older than the bgzipped file. (default FALSE)}
@@ -39,8 +41,12 @@ This function creates a pairix (px2) index a bgzipped text file. Either a preset
 \examples{
 
 filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+px_build_index(filename, force=TRUE)
+px_query(filename, 'chr22|chr22')
 px_build_index(filename, 'pairs', force=TRUE)
 px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
+px_build_index(filename, region_split_character='^', force=TRUE)
+px_query(filename, 'chr22^chr22')
 
 }
 \keyword{index}
