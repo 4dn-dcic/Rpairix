@@ -41,8 +41,12 @@ This function creates a pairix (px2) index a bgzipped text file. Either a preset
 \examples{
 
 filename = system.file(".","test_4dn.pairs.gz", package="Rpairix")
+px_build_index(filename, force=TRUE)
+px_query(filename, 'chr22|chr22')
 px_build_index(filename, 'pairs', force=TRUE)
 px_build_index(filename, sc=2, bc=3, ec=3, sc2=4, bc2=5, ec2=5, force=TRUE)
+px_build_index(filename, region_split_character='^', force=TRUE)
+px_query(filename, 'chr22^chr22')
 
 }
 \keyword{index}

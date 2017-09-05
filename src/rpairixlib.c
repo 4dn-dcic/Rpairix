@@ -346,7 +346,7 @@ void build_index(char **pinputfilename, char **ppreset, int *psc, int *pbc, int 
       else *pflag = -2;  // wrong preset
 
       // region_split_character overrides preset
-      if ((*pregion_split_character)[0] != conf.region_split_character) conf.region_split_character = (*pregion_split_character)[0];
+      if ((*pregion_split_character)[0] != DEFAULT_REGION_SPLIT_CHARACTER) conf.region_split_character = (*pregion_split_character)[0];
 
       if (*pflag != -2 && *pflag != -5 ) *pflag= ti_index_build(*pinputfilename, &conf);  // -1 if failed
     }
