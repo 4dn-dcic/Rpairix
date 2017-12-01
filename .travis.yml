@@ -1,6 +1,8 @@
 language: R
 cache: packages
+
 r_github_packages:
+  - jimhester/covr
   - r-lib/testthat
 
 r:
@@ -10,3 +12,7 @@ r:
 
 bioc_packages: GenomicRanges
 bioc_packages: InteractionSet
+
+# Upload CodeCov information
+after_success:
+  - Rscript -e 'covr::codecov()'
