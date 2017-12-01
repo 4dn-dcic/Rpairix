@@ -1,8 +1,12 @@
 language: R
 cache: packages
+r_github_packages:
+  - r-lib/testthat
+
 r:
   - release
   - devel
   - oldrel
+
 bioc_packages: GenomicRanges
 bioc_packages: InteractionSet
