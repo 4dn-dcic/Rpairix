@@ -1,12 +1,10 @@
 sudo: false
-language: R
+language: r
 cache: packages
 
 r_github_packages:
   - r-lib/testthat
-  
-r_packages:
-  - covr
+  - jimhester/covr
   
 r:
   - release
@@ -19,4 +17,4 @@ bioc_packages:
 
 # Upload CodeCov information
 after_success:
-  - Rscript -e 'library(covr); codecov()'
+  - Rscript -e 'library(covr);codecov()'
