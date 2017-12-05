@@ -3,9 +3,11 @@ language: R
 cache: packages
 
 r_github_packages:
-  - jimhester/covr
   - r-lib/testthat
-
+  
+r_packages:
+  - covr
+  
 r:
   - release
   - devel
@@ -17,5 +19,4 @@ bioc_packages:
 
 # Upload CodeCov information
 after_success:
-  - tar -C .. -xf $PKG_TARBALL
-  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'library(covr); codecov()'
