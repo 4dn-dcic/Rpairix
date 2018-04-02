@@ -55,7 +55,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```r
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.2.5.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.3.5.zip")
 ```
 
 
@@ -325,6 +325,13 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.3.5
+* Index structure and C source codes are consistent with pairix/pypairix 0.3.5. This new structure can deal with large chromosomes (>length 2^29). The older index can be read and used for regular chromosomes (<2^29) (backward-compatible).
+
+### 0.2.5
+* Index structure and C source codes are consistent with pairix/pypairix 0.2.5 (please re-index if your index was built by an older version of pairix/pypairix/Rpairix)
+* `px_build_index` function now has parameter `region_split_character` (default: '|'). Query must use the same region_split_character used for building the index.
+
 ### 0.2.4
 * Index is compatible with pairix/pypairix 0.2.4. (Magic number updated)
 
