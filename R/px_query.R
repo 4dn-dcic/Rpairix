@@ -118,7 +118,7 @@ px_query<-function(filename, query, max_mem=100000000, stringsAsFactors=FALSE, l
     qdf <- qdf[,c("seqnames1","start1","end1","seqnames2","start2","end2")]
     querystr <- df_to_querystr(qdf)
     rm(qdf)
-  } else if (class(query)=="GRangesList"){
+  } else if (class(query)=="GRangesList" || class(query)=="CompressedGRangesList"){
     # -- produce querystr from two identical-length, paired GRanges objects in a GRangesList-- #
     # test lengths
     if(length(query) != 2) stop("GRangesList must be composed of two GRanges objects.")
