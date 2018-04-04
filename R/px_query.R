@@ -94,6 +94,7 @@
 #' print(res)
 #' 
 #' # query with GRangesList
+#' class(grl)
 #' res = px_query(filename,query=grl)
 #' print(res)
 #'
