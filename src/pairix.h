@@ -28,7 +28,7 @@
 #ifndef __TABIDX_H
 #define __TABIDX_H
 
-#define PACKAGE_VERSION "0.2.5"
+#define PACKAGE_VERSION "0.3.5"
 
 #include <stdint.h>
 #include "kstring.h"
@@ -153,6 +153,19 @@ extern "C" {
         /* get linecount */
         int get_linecount(const ti_index_t *idx);
 
+        /* get file offset
+         * returns number of bgzf blocks spanning a sequence (pair) */
+        int get_nblocks(ti_index_t *idx, int tid, BGZF *fp);
+
+
+        /* check if a pairix-indexed file is a triangle
+           ( chromosome pairs occur only in one direction. e.g. if chr1|chr2 exists, chr2|chr1 shouldn't. )
+         * returns 1 if triangle
+         * returns 0 if not a triangle
+         * returns -1 if no chrom (pairs) is found in file
+         * returns -2 if the file is 1D-indexed (not applicable) */
+        int check_triangle(ti_index_t *idx);
+
 
 	/******************
 	 * Low-level APIs *
@@ -190,7 +203,7 @@ extern "C" {
 	const char *ti_iter_read(BGZF *fp, ti_iter_t iter, int *len, char seqonly);
 
 	const ti_conf_t *ti_get_conf(ti_index_t *idx);
-        
+
         /* get column index, 0-based */
         int ti_get_sc(ti_index_t *idx);
         int ti_get_sc2(ti_index_t *idx);
@@ -202,6 +215,7 @@ extern "C" {
         /* get delimiter */
         char ti_get_delimiter(ti_index_t *idx);
         char get_region_split_character(pairix_t *t);
+        char ti_get_region_split_character(ti_index_t *idx);
 
 	int ti_get_intv(const ti_conf_t *conf, int len, char *line, ti_interval_t *intv);
 
@@ -210,7 +224,7 @@ extern "C" {
 
         /* create an empty merge_iter_t struct */
         merged_iter_t *create_merged_iter(int n);
- 
+
         /* fill in an existing (allocated) iter_unit struct from an iter struct */
         void create_iter_unit(pairix_t *t, ti_iter_t iter, iter_unit *iu);
 
@@ -226,7 +240,7 @@ extern "C" {
         /* return a uniqified array given an array of strings (generic), returned array must be fried at both array level and element level */
         char **uniq(char** seq_list, int n_seq_list, int *pn_uniq_seq);
 
-        /* given an array of pairix_t structs, get an array of unique key names, 
+        /* given an array of pairix_t structs, get an array of unique key names,
            the returned array must be freed at both array level and element level */
         char** get_unique_merged_seqname(pairix_t **tbs, int n, int *pn_uniq_seq);
 
@@ -242,7 +256,7 @@ extern "C" {
         /* get a sub-list of seq2 (chr2) names given seq1, returned array must be freed at both array level and element level. */
         char **get_seq2_list_for_given_seq1(char *seq1, char **seqpair_list, int n_seqpair_list, int *pn_sub_list);
 
-        /* get a sub-list of seq1 (chr1) names given seq2, returned array must be freed at both array level and element level. */ 
+        /* get a sub-list of seq1 (chr1) names given seq2, returned array must be freed at both array level and element level. */
         char **get_seq1_list_for_given_seq2(char *seq2, char **seqpair_list, int n_seqpair_list, int *pn_sub_list);
 
         /* initialize an empty sequential_iter associated with a pairix_t struct */
@@ -253,6 +267,9 @@ extern "C" {
 
         /* add an iter to sequential_iter - the array size is dynamically incremented */
         void add_to_sequential_iter(sequential_iter_t *siter, ti_iter_t iter);
+
+        /* wrapper for 2D string query that allows autoflip */
+        sequential_iter_t *querys_2D_wrapper(pairix_t *tb, const char *reg, int flip);
 
 
 	/*******************

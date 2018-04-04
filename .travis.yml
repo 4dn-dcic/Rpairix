@@ -1,4 +1,3 @@
-sudo: false
 language: r
 cache: packages
 
@@ -11,10 +10,10 @@ r:
   - devel
   - oldrel
 
-bioc_packages: 
-  - GenomicRanges
-  - InteractionSet
+bioc_packages: GenomicRanges
+bioc_packages: InteractionSet
 
 # Upload CodeCov information
 after_success:
   - Rscript -e 'library(covr);codecov()'
+
