@@ -55,7 +55,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```r
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.3.5.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.3.6.zip")
 ```
 
 
@@ -325,6 +325,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.3.6
+* Index structure is consistent with pairix/pypairix 0.3.6. This new structure resolves integer overflow issues for linecount. the older indices can be read and used otherwise. (backward-compatible)
+
 ### 0.3.5
 * Index structure and C source codes are consistent with pairix/pypairix 0.3.5. This new structure can deal with large chromosomes (>length 2^29). The older index can be read and used for regular chromosomes (<2^29) (backward-compatible).
 
