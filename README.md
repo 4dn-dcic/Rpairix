@@ -334,7 +334,7 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 * Fixed issue where autoflip causes segmentation fault or returns an empty result on some systems. This affects the `px_query()` function with the `autoflip=TRUE` option.
 
 ### 0.3.6
-* Index structure is consistent with pairix/pypairix 0.3.7. This new structure resolves integer overflow issues for linecount. the older indices can be read and used otherwise. (backward-compatible)
+* Index structure is consistent with pairix/pypairix 0.3.6. This new structure resolves integer overflow issues for linecount. the older indices can be read and used otherwise. (backward-compatible)
 
 ### 0.3.5
 * Index structure and C source codes are consistent with pairix/pypairix 0.3.5. This new structure can deal with large chromosomes (>length 2^29). The older index can be read and used for regular chromosomes (<2^29) (backward-compatible).
