@@ -1,6 +1,6 @@
 Package: Rpairix
 Title: Rpairix
-Version: 0.3.6
+Version: 0.3.7
 Authors@R: person("Soo", "Lee", email = "duplexa@gmail.com", role = c("aut", "cre"))
 Description: R binder for pairix, tool for querying a pair of genomic ranges in a pairs file (pairix-indexed bgzipped text file)
 Depends:
@@ -11,7 +11,6 @@ Imports:
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests:
     testthat
-

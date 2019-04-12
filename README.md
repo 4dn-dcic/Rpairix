@@ -55,7 +55,7 @@ R --no-site-file --no-environ --no-save --no-restore CMD INSTALL --install-tests
 To install a specific version,
 ```r
 library(devtools)
-install_url("https://github.com/4dn-dcic/Rpairix/archive/0.3.6.zip")
+install_url("https://github.com/4dn-dcic/Rpairix/archive/0.3.7.zip")
 ```
 
 
@@ -316,7 +316,12 @@ px_get_linecount(filename)
 ## For developers
 When you modify the repo, rebuild the R package before your commit/push:
 ```
-library(devtools)
+# dependencies
+install.packages("BiocManager")
+BiocManager::install("GenomicRanges")
+BiocManager::install("InteractionSet")
+# build
+library(devtools)  # use 1.13.5 (2.0.2 does not work)
 setwd("Rpairix")
 document()
 ```
@@ -325,6 +330,9 @@ Individual R functions are written and documented in `R/`. The `src/rpairixlib.c
 ***
 
 ## Version history
+### 0.3.7
+* Fixed issue where autoflip causes segmentation fault or returns an empty result on some systems. This affects the `px_query()` function with the `autoflip=TRUE` option.
+
 ### 0.3.6
 * Index structure is consistent with pairix/pypairix 0.3.6. This new structure resolves integer overflow issues for linecount. the older indices can be read and used otherwise. (backward-compatible)
 

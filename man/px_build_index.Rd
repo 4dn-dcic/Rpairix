@@ -4,9 +4,10 @@
 \alias{px_build_index}
 \title{Indexing function on bgzipped pairs file.}
 \usage{
-px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0, sc2 = 0,
-  bc2 = 0, ec2 = 0, delimiter = "\\t", comment_char = "#",
-  region_split_character = "|", line_skip = 0, force = FALSE)
+px_build_index(filename, preset = "", sc = 0, bc = 0, ec = 0,
+  sc2 = 0, bc2 = 0, ec2 = 0, delimiter = "\\t",
+  comment_char = "#", region_split_character = "|", line_skip = 0,
+  force = FALSE)
 }
 \arguments{
 \item{filename}{a pairs file, or a bgzipped text file (sometextfile.gz) with an index file sometextfile.gz.px2 in the same folder.}
